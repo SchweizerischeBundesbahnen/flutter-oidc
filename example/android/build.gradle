@@ -1,0 +1,21 @@
+allprojects {
+    repositories {
+        maven {
+            url System.properties['bin.endpoint'] + '/ci-mobile-mvn/'
+            credentials {
+                username System.properties['gradle.wrapperUser']
+                password System.properties['gradle.wrapperPassword']
+            }
+        }
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

@@ -1,0 +1,58 @@
+name: sbb_oidc_example
+description: Demonstrates how to use the sbb_oidc plugin.
+publish_to: 'none'
+version: 3.3.0
+
+
+environment:
+  sdk: '>=3.3.4 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sbb_oidc:
+    path: ../sbb_oidc/
+  # https://github.com/SchweizerischeBundesbahnen/design_system_flutter
+  design_system_flutter:
+    git:
+      url: https://github.com/SchweizerischeBundesbahnen/design_system_flutter.git
+      ref: 1.4.0
+  # https://pub.dev/packages/collection
+  collection: ^1.18.0
+  # https://pub.dev/packages/fimber
+  fimber: ^0.7.0
+  # https://pub.dev/packages/flutter_dotenv
+  flutter_dotenv: ^5.1.0
+  # https://pub.dev/packages/flutter_json_viewer
+  flutter_json_viewer: ^1.0.1
+  # https://pub.dev/packages/get_it
+  get_it: ^7.7.0
+  # https://pub.dev/packages/http
+  http: ^1.2.1
+  # https://pub.dev/packages/meta
+  meta: ^1.12.0
+  # https://pub.dev/packages/rxdart
+  rxdart: ^0.28.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # https://pub.dev/packages/flutter_lints
+  flutter_lints: ^4.0.0
+
+
+dependency_overrides:
+  sbb_oidc_mobile:
+    path: ../sbb_oidc_mobile/
+  sbb_oidc_platform_interface:
+    path: ../sbb_oidc_platform_interface/
+  sbb_oidc_web:
+    path: ../sbb_oidc_web/
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - .env
