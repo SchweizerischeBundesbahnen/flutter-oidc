@@ -1,0 +1,8 @@
+{
+    "sub": "XYZ123ab45cd",
+    "name": "John Doe",
+    "family_name": "Doe",
+    "given_name": "John",
+    "picture": "https://sbb.ch/v1.0/me/photo/$value",
+    "email": "john.doe@sbb.ch"
+}

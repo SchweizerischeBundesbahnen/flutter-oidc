@@ -1,0 +1,55 @@
+name: sbb_oidc
+description: SBB OpenID Connect plugin for Flutter
+homepage: https://code.sbb.ch/projects/KD_FLUTTER/repos/esta_mobile_flutter_oidc
+publish_to: none
+version: 3.3.0
+
+
+environment:
+  sdk: '>=3.3.4 <4.0.0'
+
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        default_package: sbb_oidc_mobile
+      ios:
+        default_package: sbb_oidc_mobile
+      web:
+        default_package: sbb_oidc_web
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sbb_oidc_platform_interface:
+    git:
+      url: https://github.com/SchweizerischeBundesbahnen/flutter-oidc.git
+      path: sbb_oidc_platform_interface
+      ref: 3.3.0
+  sbb_oidc_mobile:
+    git:
+      url: https://github.com/SchweizerischeBundesbahnen/flutter-oidc.git
+      path: sbb_oidc_mobile
+      ref: 3.3.0
+  sbb_oidc_web:
+    git:
+      url: https://github.com/SchweizerischeBundesbahnen/flutter-oidc.git
+      path: sbb_oidc_web
+      ref: 3.3.0
+  # https://pub.dev/packages/http
+  http: ^1.2.1
+  # https://pub.dev/packages/meta
+  meta: ^1.12.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # https://pub.dev/packages/build_runner
+  build_runner: ^2.4.11
+  # https://pub.dev/packages/flutter_lints
+  flutter_lints: ^4.0.0
+  # https://pub.dev/packages/mockito
+  mockito: ^5.4.4

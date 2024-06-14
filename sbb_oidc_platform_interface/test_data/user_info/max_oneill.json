@@ -1,0 +1,8 @@
+{
+    "sub": "XXX1234",
+    "name": "Max O'Neill",
+    "family_name": "O'Neill",
+    "given_name": "Max",
+    "picture": "https://sbb.ch/v1.0/me/photo/$value",
+    "email": "max.oneill@sbb.ch"
+}
