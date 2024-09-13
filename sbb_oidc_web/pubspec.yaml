@@ -1,12 +1,12 @@
 name: sbb_oidc_web
 description: Web implementation of the sbb_oidc plugin.
-homepage: https://code.sbb.ch/projects/KD_FLUTTER/repos/esta_mobile_flutter_oidc
+homepage: https://github.com/SchweizerischeBundesbahnen/flutter-oidc
 publish_to: none
-version: 3.3.0
+version: 3.4.0
 
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk: '>=3.5.2 <4.0.0'
 
 
 flutter:
@@ -26,7 +26,7 @@ dependencies:
     git:
       url: https://github.com/SchweizerischeBundesbahnen/flutter-oidc.git
       path: sbb_oidc_platform_interface
-      ref: 3.3.0
+      ref: 3.4.0
   # https://pub.dev/packages/msal_js
   msal_js: ^2.14.0
 
