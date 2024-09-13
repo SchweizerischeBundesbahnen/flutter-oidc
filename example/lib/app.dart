@@ -9,8 +9,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       themeMode: ThemeMode.system,
-      theme: SBBTheme.light(hostPlatform: HostPlatform.native),
-      darkTheme: SBBTheme.dark(hostPlatform: HostPlatform.native),
+      theme: SBBTheme.light(),
+      darkTheme: SBBTheme.dark(),
       home: const EntryPage(),
     );
   }
