@@ -1,4 +1,4 @@
-# sbb_oidc 3.3.0
+# sbb_oidc 3.4.0
 
 A Flutter plugin for OpenID Connect (OIDC).
 
@@ -195,7 +195,7 @@ sbb_oidc:
     git:
         url: https://github.com/SchweizerischeBundesbahnen/flutter-oidc.git
         path: sbb_oidc
-        ref: 3.3.0
+        ref: 3.4.0
 ```
 
 <a name="create-oidc-client"></a>
