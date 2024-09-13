@@ -2,7 +2,7 @@ name: sbb_oidc_platform_interface
 description: A common platform interface for the sbb_oidc plugin.
 homepage: https://github.com/SchweizerischeBundesbahnen/flutter-oidc
 publish_to: none
-version: 3.3.0
+version: 3.4.0
 
 
 environment:

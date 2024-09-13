@@ -2,7 +2,7 @@ name: sbb_oidc
 description: SBB OpenID Connect plugin for Flutter
 homepage: https://github.com/SchweizerischeBundesbahnen/flutter-oidc
 publish_to: none
-version: 3.3.0
+version: 3.4.0
 
 
 environment:
@@ -27,17 +27,17 @@ dependencies:
     git:
       url: https://github.com/SchweizerischeBundesbahnen/flutter-oidc.git
       path: sbb_oidc_platform_interface
-      ref: 3.3.0
+      ref: 3.4.0
   sbb_oidc_mobile:
     git:
       url: https://github.com/SchweizerischeBundesbahnen/flutter-oidc.git
       path: sbb_oidc_mobile
-      ref: 3.3.0
+      ref: 3.4.0
   sbb_oidc_web:
     git:
       url: https://github.com/SchweizerischeBundesbahnen/flutter-oidc.git
       path: sbb_oidc_web
-      ref: 3.3.0
+      ref: 3.4.0
   # https://pub.dev/packages/http
   http: ^1.2.2
   # https://pub.dev/packages/meta
