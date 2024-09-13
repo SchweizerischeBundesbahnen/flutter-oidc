@@ -142,7 +142,7 @@ class OidcServiceImpl extends OidcService {
     );
     try {
       final response = await _appAuth.authorizeAndExchangeCode(request);
-      return response!.oidcToken;
+      return response.oidcToken;
     } on PlatformException catch (e) {
       // Convert platform exception to more specific exception.
       throw e.convert();
@@ -163,7 +163,7 @@ class OidcServiceImpl extends OidcService {
 
     try {
       final response = await _appAuth.token(request);
-      return response!.oidcToken;
+      return response.oidcToken;
     } on PlatformException catch (e) {
       // Convert platform exception to more specific exception.
       throw e.convert();
@@ -182,7 +182,7 @@ class OidcServiceImpl extends OidcService {
 
     try {
       final response = await _appAuth.token(request);
-      return response!.oidcToken;
+      return response.oidcToken;
     } on PlatformException catch (e) {
       // Convert platform exception to more specific exception.
       throw e.convert();
