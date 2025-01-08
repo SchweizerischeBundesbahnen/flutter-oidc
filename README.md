@@ -1,6 +1,6 @@
 # sbb_oidc 3.4.0
 
-A Flutter plugin for OpenID Connect (OIDC).
+A Flutter package for OpenID Connect (OIDC).
 
 ## Table of contents
 
@@ -10,7 +10,6 @@ A Flutter plugin for OpenID Connect (OIDC).
 - [Setup](#setup)
   * [Android](#android)
   * [iOS](#ios)
-  * [Web](#web)
 - [Usage](#usage)
   * [Add dependency](#add-dependency)
   * [Create OIDC client](#create-oidc-client)
@@ -33,7 +32,6 @@ A Flutter plugin for OpenID Connect (OIDC).
 <div id="supported_platforms">
   <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android badge"/>
   <img src="https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=apple&logoColor=white" alt="iOS badge">
-  <img src="https://img.shields.io/badge/-Web-2C5263.svg?style=for-the-badge" alt="Web badge"/>
 </div>
 
 <a name="preconditions"></a>
@@ -161,26 +159,6 @@ Go to the [Info.plist][12] for your iOS app to specify the custom scheme. There 
     </dict>
 </array>
 ```
-
-<a name="web"></a>
-### Web
-
-This plugin does not come with a build of MSAL.js. To add MSAL.js to your app add the the follwoing to your [index.html][13] file.
-
-```html
-<head>
-  ...
-    <!-- MSAL.js -->
-  <script type="text/javascript" 
-          src="https://alcdn.msauth.net/browser/2.14.2/js/msal-browser.min.js"
-          integrity="sha384-ggh+EF1aSqm+Y4yvv2n17KpurNcZTeYtUZUvhPziElsstmIEubyEB6AIVpKLuZgr" 
-          crossorigin="anonymous">
-  </script>
-  ...
-</head>
-```
-
-Refer to the [MSAL.js documentation][3] for detailed installation instructions. Note that you will need a CDN build of MSAL.js and not an NPM build.
 
 <a name="usage"></a>
 ## Usage

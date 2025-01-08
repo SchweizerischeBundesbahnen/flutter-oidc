@@ -16,8 +16,6 @@ flutter:
         default_package: sbb_oidc_mobile
       ios:
         default_package: sbb_oidc_mobile
-      web:
-        default_package: sbb_oidc_web
 
 
 dependencies:

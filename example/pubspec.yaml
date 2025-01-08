@@ -48,8 +48,6 @@ dependency_overrides:
     path: ../sbb_oidc_mobile/
   sbb_oidc_platform_interface:
     path: ../sbb_oidc_platform_interface/
-  sbb_oidc_web:
-    path: ../sbb_oidc_web/
 
 
 flutter:
