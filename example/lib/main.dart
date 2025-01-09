@@ -8,7 +8,7 @@ import 'package:sbb_oidc_example/di.dart';
 import 'package:sbb_oidc_example/flavor.dart';
 
 void main() async {
-  start(Flavor.esqMobileDev);
+  start(Flavor.exampleApp);
 }
 
 Future<void> start(Flavor flavor) async {

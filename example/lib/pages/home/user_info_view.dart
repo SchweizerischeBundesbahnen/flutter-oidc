@@ -1,5 +1,5 @@
-import 'package:design_system_flutter/design_system_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
 import 'package:sbb_oidc/sbb_oidc.dart';
 import 'package:sbb_oidc_example/auth/authenticator.dart';
 import 'package:sbb_oidc_example/auth/token_spec_provider.dart';

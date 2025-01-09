@@ -1,6 +1,6 @@
-import 'package:design_system_flutter/design_system_flutter.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
 import 'package:sbb_oidc_example/auth/authenticator.dart';
 import 'package:sbb_oidc_example/di.dart';
 import 'package:sbb_oidc_example/pages/login_page.dart';
