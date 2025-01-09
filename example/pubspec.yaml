@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   sbb_oidc:
-    path: ../sbb_oidc/
+    path: ../
   # https://github.com/SchweizerischeBundesbahnen/design_system_flutter
   design_system_flutter:
     git:
@@ -41,13 +41,6 @@ dev_dependencies:
     sdk: flutter
   # https://pub.dev/packages/flutter_lints
   flutter_lints: ^4.0.0
-
-
-dependency_overrides:
-  sbb_oidc_mobile:
-    path: ../sbb_oidc_mobile/
-  sbb_oidc_platform_interface:
-    path: ../sbb_oidc_platform_interface/
 
 
 flutter:
