@@ -22,8 +22,6 @@ class JsonWebTokenListTile extends StatelessWidget {
       case false:
         final expTime = jwt.expirationTime.toIso8601String();
         return 'Expires $expTime';
-      default:
-        return 'No expiration date';
     }
   }
 
