@@ -1,4 +1,4 @@
-# sbb_oidc 3.4.0
+# sbb_oidc 4.0.0
 
 A Flutter package for OpenID Connect (OIDC).
 
@@ -169,11 +169,7 @@ Go to the [Info.plist][12] for your iOS app to specify the custom scheme. There 
 Add `sbb_oidc` as a dependency in your [pubspec.yaml][14] file.
 
 ```yaml
-sbb_oidc:
-    git:
-        url: https://github.com/SchweizerischeBundesbahnen/flutter-oidc.git
-        path: sbb_oidc
-        ref: 3.4.0
+sbb_oidc: ^4.0.0
 ```
 
 <a name="create-oidc-client"></a>
