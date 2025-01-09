@@ -48,8 +48,8 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>sbboauth</string>
-				<string>serverless</string>
+				<string>sbboidcexampleappint</string>
+				<string>esqappdevauth</string>
 			</array>
 		</dict>
 	</array>

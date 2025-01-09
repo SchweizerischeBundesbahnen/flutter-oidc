@@ -60,7 +60,7 @@ class _State extends State<HomePage> {
       return const SizedBox.shrink();
     }
     return Container(
-      padding: const EdgeInsetsDirectional.all(16),
+      padding: const EdgeInsetsDirectional.fromSTEB(8, 16, 8, 0),
       child: SBBSegmentedButton.text(
         values: tokenSpecs.all.map((e) => e.displayName).toList(),
         selectedStateIndex: index,
