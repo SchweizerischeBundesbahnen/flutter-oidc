@@ -11,16 +11,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  platform-interface:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: sbb_oidc_platform_interface
+  test:
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: 3.27.1
           cache: true
       - run: flutter pub get
       - run: flutter test
