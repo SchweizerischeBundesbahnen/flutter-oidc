@@ -1,5 +1,5 @@
-import 'package:design_system_flutter/design_system_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
 import 'package:sbb_oidc/sbb_oidc.dart';
 import 'package:sbb_oidc_example/pages/json_web_token_page.dart';
 
@@ -22,8 +22,6 @@ class JsonWebTokenListTile extends StatelessWidget {
       case false:
         final expTime = jwt.expirationTime.toIso8601String();
         return 'Expires $expTime';
-      default:
-        return 'No expiration date';
     }
   }
 

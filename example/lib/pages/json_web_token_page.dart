@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:design_system_flutter/design_system_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_json_viewer/flutter_json_viewer.dart';
+import 'package:flutter_json_view/flutter_json_view.dart';
+import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
 import 'package:sbb_oidc/sbb_oidc.dart';
 import 'package:sbb_oidc_example/auth/authenticator.dart';
 import 'package:sbb_oidc_example/di.dart';
@@ -36,21 +36,34 @@ class JsonWebTokenPage extends StatelessWidget {
       children: [
         const SBBListHeader('Header'),
         Container(
-          padding: const EdgeInsetsDirectional.fromSTEB(2, 0, 16, 16),
-          child: JsonViewer(jwt.header),
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
+          child: JsonView.map(
+            jwt.header,
+            theme: const JsonViewTheme(
+              backgroundColor: Colors.transparent,
+            ),
+          ),
         ),
         const Divider(),
         const SBBListHeader('Payload'),
         Container(
-          padding: const EdgeInsetsDirectional.fromSTEB(2, 0, 16, 16),
-          child: JsonViewer(jwt.payload),
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
+          child: JsonView.map(
+            jwt.payload,
+            theme: const JsonViewTheme(
+              backgroundColor: Colors.transparent,
+            ),
+          ),
         ),
         const Divider(),
         const SBBListHeader('Signature'),
         Container(
-          padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 24),
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
           child: Text(
             base64Url.encode(jwt.signature),
+            style: const TextStyle(
+              color: Colors.grey,
+            ),
           ),
         ),
       ],

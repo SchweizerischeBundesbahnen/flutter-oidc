@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:design_system_flutter/design_system_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
 import 'package:sbb_oidc_example/auth/token_spec_provider.dart';
 import 'package:sbb_oidc_example/di.dart';
 import 'package:sbb_oidc_example/pages/home/end_session_button.dart';
@@ -60,7 +60,7 @@ class _State extends State<HomePage> {
       return const SizedBox.shrink();
     }
     return Container(
-      padding: const EdgeInsetsDirectional.all(16),
+      padding: const EdgeInsetsDirectional.fromSTEB(8, 16, 8, 0),
       child: SBBSegmentedButton.text(
         values: tokenSpecs.all.map((e) => e.displayName).toList(),
         selectedStateIndex: index,

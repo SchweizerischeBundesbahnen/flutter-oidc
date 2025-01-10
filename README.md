@@ -1,6 +1,6 @@
-# sbb_oidc 3.4.0
+# sbb_oidc 4.0.0
 
-A Flutter plugin for OpenID Connect (OIDC).
+A Flutter package for OpenID Connect (OIDC).
 
 ## Table of contents
 
@@ -10,7 +10,6 @@ A Flutter plugin for OpenID Connect (OIDC).
 - [Setup](#setup)
   * [Android](#android)
   * [iOS](#ios)
-  * [Web](#web)
 - [Usage](#usage)
   * [Add dependency](#add-dependency)
   * [Create OIDC client](#create-oidc-client)
@@ -33,7 +32,6 @@ A Flutter plugin for OpenID Connect (OIDC).
 <div id="supported_platforms">
   <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android badge"/>
   <img src="https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=apple&logoColor=white" alt="iOS badge">
-  <img src="https://img.shields.io/badge/-Web-2C5263.svg?style=for-the-badge" alt="Web badge"/>
 </div>
 
 <a name="preconditions"></a>
@@ -44,7 +42,7 @@ Authentication with OIDC requires the app to be registered with an Identity Prov
 <a name="redirect-url"></a>
 ### Redirect URL
 
-The redirect URL must contain a scheme, host and path component in the format **scheme://host/path** and and be written in lowercase.
+The redirect URL must contain a scheme, host and path component in the format **scheme://host/path** and be written in lowercase.
 
 `Example: myappname://myhost/redirect`
 
@@ -162,26 +160,6 @@ Go to the [Info.plist][12] for your iOS app to specify the custom scheme. There 
 </array>
 ```
 
-<a name="web"></a>
-### Web
-
-This plugin does not come with a build of MSAL.js. To add MSAL.js to your app add the the follwoing to your [index.html][13] file.
-
-```html
-<head>
-  ...
-    <!-- MSAL.js -->
-  <script type="text/javascript" 
-          src="https://alcdn.msauth.net/browser/2.14.2/js/msal-browser.min.js"
-          integrity="sha384-ggh+EF1aSqm+Y4yvv2n17KpurNcZTeYtUZUvhPziElsstmIEubyEB6AIVpKLuZgr" 
-          crossorigin="anonymous">
-  </script>
-  ...
-</head>
-```
-
-Refer to the [MSAL.js documentation][3] for detailed installation instructions. Note that you will need a CDN build of MSAL.js and not an NPM build.
-
 <a name="usage"></a>
 ## Usage
 
@@ -191,11 +169,7 @@ Refer to the [MSAL.js documentation][3] for detailed installation instructions. 
 Add `sbb_oidc` as a dependency in your [pubspec.yaml][14] file.
 
 ```yaml
-sbb_oidc:
-    git:
-        url: https://github.com/SchweizerischeBundesbahnen/flutter-oidc.git
-        path: sbb_oidc
-        ref: 3.4.0
+sbb_oidc: ^4.0.0
 ```
 
 <a name="create-oidc-client"></a>
@@ -268,7 +242,7 @@ The SBB uid  (u/e Number) is specified in the ID token as `sbbuid` claim.
 
 ```dart
 final oidcToken = ....
-final idToken = oidcToken.idToken;
+final idToken = JsonWebToken.decode(oidcToken.idToken);
 final uid = idToken.payload['sbbuid'] as String;
 ```
 
@@ -380,7 +354,7 @@ See [example app][15].
 
 
 [1]: https://azure-ad.api.sbb.ch/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
-[2]: https://confluence.sbb.ch/display/IAM/Azure+AD+API%3A+Self-Service+API+for+App+Registrations+with+Azure+AD#
+[2]: https://confluence.sbb.ch/display/IAM/Azure+AD+API%3A+Self-Service+API+for+App+Registrations+with+Entra+ID
 [3]: https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/cdn-usage.md
 [4]: https://developer.sbb.ch/home
 [10]: example/android/app/build.gradle

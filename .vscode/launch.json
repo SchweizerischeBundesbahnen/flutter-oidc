@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Mobile",
+            "name": "Example App",
             "request": "launch",
             "type": "dart",
             "program": "example/lib/main.dart",
@@ -10,19 +10,12 @@
             "args": []
         },
         {
-            "name": "Web",
+            "name": "ESQ Mobile Dev",
             "request": "launch",
             "type": "dart",
-            "program": "example/lib/main.dart",
+            "program": "example/lib/main_esq_mobile_dev.dart",
             "flutterMode": "debug",
-            "args": [
-                "-d",
-                "chrome",
-                "--web-hostname",
-                "localhost",
-                "--web-port",
-                "4200"
-            ]
-        },
+            "args": []
+        }
     ]
 }
