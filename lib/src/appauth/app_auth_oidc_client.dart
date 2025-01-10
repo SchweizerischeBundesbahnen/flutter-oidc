@@ -178,6 +178,8 @@ class AppAuthOidcClient implements OidcClient {
     try {
       final response = await _appAuth.authorizeAndExchangeCode(request);
       return response.oidcToken;
+    } on FlutterAppAuthUserCancelledException catch (e) {
+      throw LoginCanceledException(cause: e);
     } on PlatformException catch (e) {
       // Convert platform exception to more specific exception.
       throw e.convert();
