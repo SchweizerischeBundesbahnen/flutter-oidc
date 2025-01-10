@@ -242,7 +242,7 @@ The SBB uid  (u/e Number) is specified in the ID token as `sbbuid` claim.
 
 ```dart
 final oidcToken = ....
-final idToken = oidcToken.idToken;
+final idToken = JsonWebToken.decode(oidcToken.idToken);
 final uid = idToken.payload['sbbuid'] as String;
 ```
 
