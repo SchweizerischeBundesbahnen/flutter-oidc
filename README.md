@@ -1,5 +1,3 @@
-# sbb_oidc 4.0.0
-
 A Flutter package for OpenID Connect (OIDC).
 
 ## Table of contents
