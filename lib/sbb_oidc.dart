@@ -16,6 +16,7 @@ export 'package:sbb_oidc/src/login_prompt.dart';
 export 'package:sbb_oidc/src/oidc_client.dart';
 export 'package:sbb_oidc/src/oidc_token.dart';
 export 'package:sbb_oidc/src/openid_provider_metadata.dart';
+export 'package:sbb_oidc/src/sbb_discovery_url.dart';
 export 'package:sbb_oidc/src/user_info.dart';
 
 class SBBOpenIDConnect {
