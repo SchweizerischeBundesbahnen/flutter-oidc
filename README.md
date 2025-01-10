@@ -167,7 +167,7 @@ Go to the [Info.plist][12] for your iOS app to specify the custom scheme. There 
 Add `sbb_oidc` as a dependency in your [pubspec.yaml][14] file.
 
 ```yaml
-sbb_oidc: ^4.0.0
+sbb_oidc: ^4.0.1
 ```
 
 <a name="create-oidc-client"></a>
