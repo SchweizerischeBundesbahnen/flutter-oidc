@@ -42,7 +42,7 @@ Authentication with OIDC requires the app to be registered with an Identity Prov
 <a name="redirect-url"></a>
 ### Redirect URL
 
-The redirect URL must contain a scheme, host and path component in the format **scheme://host/path** and and be written in lowercase.
+The redirect URL must contain a scheme, host and path component in the format **scheme://host/path** and be written in lowercase.
 
 `Example: myappname://myhost/redirect`
 
@@ -354,7 +354,7 @@ See [example app][15].
 
 
 [1]: https://azure-ad.api.sbb.ch/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
-[2]: https://confluence.sbb.ch/display/IAM/Azure+AD+API%3A+Self-Service+API+for+App+Registrations+with+Azure+AD#
+[2]: https://confluence.sbb.ch/display/IAM/Azure+AD+API%3A+Self-Service+API+for+App+Registrations+with+Entra+ID
 [3]: https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/cdn-usage.md
 [4]: https://developer.sbb.ch/home
 [10]: example/android/app/build.gradle
