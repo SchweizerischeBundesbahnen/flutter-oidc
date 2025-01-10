@@ -21,6 +21,16 @@ export 'package:sbb_oidc/src/user_info.dart';
 class SBBOpenIDConnect {
   const SBBOpenIDConnect._();
 
+  /// Creates an OIDC client.
+  ///
+  /// Parameters:
+  /// - [discoveryUrl]: The OpenID Connect discovery endpoint URL
+  /// - [clientId]: The registered client identifier
+  /// - [redirectUrl]: The URL where the server redirects after authentication
+  /// - [postLogoutRedirectUrl]: Optional URL for redirect after logout
+  /// - [httpClient]: Optional custom HTTP client for requests
+  ///
+  /// Returns a configured [OidcClient] ready for authentication operations.
   static Future<OidcClient> createClient({
     required String discoveryUrl,
     required String clientId,
