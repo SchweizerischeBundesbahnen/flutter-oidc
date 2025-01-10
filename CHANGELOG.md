@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.0.1]
+
+- Export SBB Discovery URLs
+
 ## [4.0.0]
 
 - **Dropped support for Web**
