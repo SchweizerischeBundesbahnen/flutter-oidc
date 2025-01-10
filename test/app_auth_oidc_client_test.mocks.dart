@@ -43,11 +43,6 @@ class _FakeStreamedResponse_2 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeAccessToken_3 extends _i1.SmartFake implements _i2.AccessToken {
-  _FakeAccessToken_3(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
 /// A class which mocks [AccessToken].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -359,31 +354,34 @@ class MockOidcToken extends _i1.Mock implements _i2.OidcToken {
           as String);
 
   @override
-  _i2.AccessToken get accessToken =>
+  String get accessToken =>
       (super.noSuchMethod(
             Invocation.getter(#accessToken),
-            returnValue: _FakeAccessToken_3(
+            returnValue: _i4.dummyValue<String>(
               this,
               Invocation.getter(#accessToken),
             ),
-            returnValueForMissingStub: _FakeAccessToken_3(
+            returnValueForMissingStub: _i4.dummyValue<String>(
               this,
               Invocation.getter(#accessToken),
             ),
           )
-          as _i2.AccessToken);
+          as String);
 
   @override
-  _i2.JsonWebToken get idToken =>
+  String get idToken =>
       (super.noSuchMethod(
             Invocation.getter(#idToken),
-            returnValue: _FakeJsonWebToken_0(this, Invocation.getter(#idToken)),
-            returnValueForMissingStub: _FakeJsonWebToken_0(
+            returnValue: _i4.dummyValue<String>(
+              this,
+              Invocation.getter(#idToken),
+            ),
+            returnValueForMissingStub: _i4.dummyValue<String>(
               this,
               Invocation.getter(#idToken),
             ),
           )
-          as _i2.JsonWebToken);
+          as String);
 
   @override
   Map<String, dynamic> toJson() =>

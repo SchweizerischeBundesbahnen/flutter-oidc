@@ -133,11 +133,11 @@ class _State extends State<OidcTokenView> {
             children: [
               JsonWebTokenListTile(
                 title: 'Access token',
-                jwt: token.accessToken.toJwt(),
+                jwt: JsonWebToken.decode(token.accessToken),
               ),
               JsonWebTokenListTile(
                 title: 'ID token',
-                jwt: token.idToken,
+                jwt: JsonWebToken.decode(token.idToken),
                 isLastElement: true,
               ),
             ],

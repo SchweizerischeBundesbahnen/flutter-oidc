@@ -7,10 +7,10 @@ extension TokenResponseX on TokenResponse {
   OidcToken get oidcToken {
     return OidcToken(
       tokenType: tokenType!,
-      accessToken: AccessToken(accessToken!),
+      accessToken: accessToken!,
       accessTokenExpirationDateTime: accessTokenExpirationDateTime,
       refreshToken: refreshToken,
-      idToken: JsonWebToken.decode(idToken!),
+      idToken: idToken!,
     );
   }
 }

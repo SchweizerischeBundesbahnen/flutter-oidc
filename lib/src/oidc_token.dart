@@ -2,9 +2,6 @@ import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
-import 'package:sbb_oidc/sbb_oidc.dart';
-import 'package:sbb_oidc/src/access_token_converter.dart';
-import 'package:sbb_oidc/src/jwt/json_web_token_converter.dart';
 
 part 'oidc_token.g.dart';
 
@@ -12,10 +9,6 @@ part 'oidc_token.g.dart';
 @JsonSerializable(
   fieldRename: FieldRename.snake,
   explicitToJson: true,
-  converters: [
-    AccessTokenConverter(),
-    JsonWebTokenConverter(),
-  ],
 )
 @sealed
 @immutable
@@ -28,11 +21,13 @@ class OidcToken {
     required this.idToken,
   });
 
+  /// Creates an [OidcToken] from a json string.
   factory OidcToken.fromJsonString(String jsonString) {
     final json = jsonDecode(jsonString);
     return OidcToken.fromJson(json);
   }
 
+  /// Creates an [OidcToken] from json.
   factory OidcToken.fromJson(Map<String, dynamic> json) {
     return _$OidcTokenFromJson(json);
   }
@@ -47,7 +42,7 @@ class OidcToken {
   /// server may also issue a refresh token when the access token is issued.
   ///
   /// https://docs.microsoft.com/en-us/azure/active-directory/develop/access-tokens
-  final AccessToken accessToken;
+  final String accessToken;
 
   /// Indicates when [accessToken] will expire.
   final DateTime? accessTokenExpirationDateTime;
@@ -77,7 +72,7 @@ class OidcToken {
   /// inside client applications.
   ///
   /// https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens
-  final JsonWebToken idToken;
+  final String idToken;
 
   /// The expired state of the access token.
   bool? get isExpired {
@@ -89,12 +84,12 @@ class OidcToken {
     }
   }
 
-  /// Converts this OIDC token to json.
+  /// Converts this [OidcToken] to json.
   Map<String, dynamic> toJson() {
     return _$OidcTokenToJson(this);
   }
 
-  /// Converts this OIDC token to a json string.
+  /// Converts this [OidcToken] to a json string.
   String toJsonString({bool pretty = false}) {
     final encoder = JsonEncoder.withIndent(pretty ? ' ' * 2 : null);
     final json = toJson();

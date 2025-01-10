@@ -6,7 +6,6 @@ import 'package:sbb_oidc/src/oidc_client.dart';
 import 'package:sbb_oidc/src/oidc_discovery.dart';
 import 'package:sbb_oidc/src/token_store.dart';
 
-export 'package:sbb_oidc/src/access_token.dart';
 export 'package:sbb_oidc/src/exceptions/login_canceled_exception.dart';
 export 'package:sbb_oidc/src/exceptions/multi_factor_authentication_exception.dart';
 export 'package:sbb_oidc/src/exceptions/network_exception.dart';

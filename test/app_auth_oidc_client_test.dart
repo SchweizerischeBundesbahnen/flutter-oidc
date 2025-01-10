@@ -9,7 +9,6 @@ import 'package:sbb_oidc/src/appauth/app_auth_oidc_client.dart';
 import 'package:sbb_oidc/src/token_store.dart';
 
 @GenerateNiceMocks([
-  MockSpec<AccessToken>(),
   MockSpec<Client>(),
   MockSpec<OidcToken>(),
   MockSpec<OpenIDProviderMetadata>(),
@@ -68,12 +67,12 @@ OpenIDProviderMetadata _mockProviderConfiguration() {
 }
 
 TokenStore _mockTokenStore() {
-  final accessToken = MockAccessToken();
-  when(accessToken.value).thenReturn('mock_access_token');
   final oidcToken = MockOidcToken();
-  when(oidcToken.accessToken).thenReturn(accessToken);
-  when(oidcToken.isExpired).thenReturn(false);
   when(oidcToken.tokenType).thenReturn('Bearer');
+  when(oidcToken.accessToken).thenReturn('mock_access_token');
+  when(oidcToken.idToken).thenReturn('mock_id_token');
+  when(oidcToken.refreshToken).thenReturn('mock_refresh_token');
+  when(oidcToken.isExpired).thenReturn(false);
   final tokenStore = MockTokenStore();
   when(tokenStore.read(any)).thenAnswer((_) async => oidcToken);
   return tokenStore;

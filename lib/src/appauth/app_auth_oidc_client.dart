@@ -107,7 +107,7 @@ class AppAuthOidcClient implements OidcClient {
     final response = await httpClient.get(
       url,
       headers: {
-        'Authorization': '${token.tokenType} ${token.accessToken.value}',
+        'Authorization': '${token.tokenType} ${token.accessToken}',
       },
     );
     // Handle errors.
@@ -134,7 +134,7 @@ class AppAuthOidcClient implements OidcClient {
     final tokens = await tokenStore.readAll();
     if (tokens.isEmpty) return;
     // Get all id tokens
-    final idTokens = <JsonWebToken>{};
+    final idTokens = <String>{};
     for (var oidcToken in tokens.values) {
       final idToken = oidcToken.idToken;
       idTokens.add(idToken);
@@ -143,7 +143,7 @@ class AppAuthOidcClient implements OidcClient {
     await tokenStore.deleteAll();
     // Call end session to delete browser cache.
     final request = EndSessionRequest(
-      idTokenHint: idTokens.first.encode(),
+      idTokenHint: idTokens.first,
       postLogoutRedirectUrl: postLogoutRedirectUrl,
       serviceConfiguration: authorizationServiceConfiguration,
     );

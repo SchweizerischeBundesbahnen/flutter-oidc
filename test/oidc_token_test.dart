@@ -12,7 +12,6 @@ void main() {
       expect(token, isNotNull);
       expect(token.tokenType, 'Bearer');
       expect(token.accessToken, isNotNull);
-      expect(token.accessToken.isJsonWebToken, true);
       expect(token.idToken, isNotNull);
       expect(token.refreshToken, isNotNull);
       expect(token.isExpired, true);
@@ -25,7 +24,6 @@ void main() {
       expect(token, isNotNull);
       expect(token.tokenType, 'Bearer');
       expect(token.accessToken, isNotNull);
-      expect(token.accessToken.isJsonWebToken, true);
       expect(token.idToken, isNotNull);
       expect(token.refreshToken, isNotNull);
       expect(token.isExpired, true);
@@ -40,7 +38,6 @@ void main() {
       expect(token, isNotNull);
       expect(token.tokenType, 'Bearer');
       expect(token.accessToken, isNotNull);
-      expect(token.accessToken.isJsonWebToken, true);
       expect(token.idToken, isNotNull);
       expect(token.refreshToken, isNotNull);
       expect(token.isExpired, true);
@@ -53,7 +50,6 @@ void main() {
       expect(token, isNotNull);
       expect(token.tokenType, 'Bearer');
       expect(token.accessToken, isNotNull);
-      expect(token.accessToken.isJsonWebToken, true);
       expect(token.idToken, isNotNull);
       expect(token.refreshToken, isNotNull);
       expect(token.isExpired, true);
