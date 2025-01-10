@@ -7,7 +7,7 @@ import 'package:sbb_oidc_example/app.dart';
 import 'package:sbb_oidc_example/di.dart';
 import 'package:sbb_oidc_example/flavor.dart';
 
-void main() async {
+void main() {
   start(Flavor.exampleApp);
 }
 

@@ -1,6 +1,6 @@
 # sbb_oidc_example
 
-This app demonstrates how to use the `sbb_oidc` plugin. 
+This app demonstrates how to use the `sbb_oidc` package. 
 
 ## Setup
 
@@ -13,7 +13,7 @@ SCOPES=<The scopes that your app requires>
 MOBILE_REDIRECT_URL=<The redirect url of your mobile app>
 ```
 
-If you want to use other flavors you must create one `.env` file for each flavor. The content of the files may differ. Check the authenticator config factory functions defined in [flavor] to find out the exact content.
+If you want to use other flavors you must create one `.env` file for each flavor. The content of the files may differ. Check the authenticator config factory functions defined in [flavor] to find out the exact content for each flavor.
 
 ## Run the app
 
@@ -21,6 +21,12 @@ To run the app `cd` into the root dir of the example and execute the following c
 
 ```sh
 flutter run -t lib/main.dart
+```
+
+To run a different flavor, you must change the `main.dart` to the one of the flavor you want to run:
+
+```sh
+flutter run -t lib/main_esq_mobile_dev.dart
 ```
 
 

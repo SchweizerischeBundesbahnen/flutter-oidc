@@ -2,10 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Mobile",
+            "name": "Example App",
             "request": "launch",
             "type": "dart",
             "program": "example/lib/main.dart",
+            "flutterMode": "debug",
+            "args": []
+        },
+        {
+            "name": "ESQ Mobile Dev",
+            "request": "launch",
+            "type": "dart",
+            "program": "example/lib/main_esq_mobile_dev.dart",
             "flutterMode": "debug",
             "args": []
         }
