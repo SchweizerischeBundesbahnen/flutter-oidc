@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-import 'package:sbb_oidc/src/jwt/json_web_token_codec.dart';
+import 'package:sbb_oidc/src/json_web_token_codec.dart';
 
 /// See https://datatracker.ietf.org/doc/html/rfc7519
 @sealed

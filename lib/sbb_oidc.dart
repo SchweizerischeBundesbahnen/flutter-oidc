@@ -11,7 +11,7 @@ export 'package:sbb_oidc/src/exceptions/multi_factor_authentication_exception.da
 export 'package:sbb_oidc/src/exceptions/network_exception.dart';
 export 'package:sbb_oidc/src/exceptions/oidc_exception.dart';
 export 'package:sbb_oidc/src/exceptions/refresh_token_expired_exception.dart';
-export 'package:sbb_oidc/src/jwt/json_web_token.dart';
+export 'package:sbb_oidc/src/json_web_token.dart';
 export 'package:sbb_oidc/src/login_prompt.dart';
 export 'package:sbb_oidc/src/oidc_client.dart';
 export 'package:sbb_oidc/src/oidc_token.dart';
