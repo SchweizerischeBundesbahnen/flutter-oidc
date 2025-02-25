@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:sbb_oidc/src/appauth/app_auth_oidc_client.dart';
 import 'package:sbb_oidc/src/oidc_client.dart';
 import 'package:sbb_oidc/src/oidc_discovery.dart';
+import 'package:sbb_oidc/src/token_accessibility.dart';
 import 'package:sbb_oidc/src/token_store.dart';
 
 export 'package:sbb_oidc/src/exceptions/login_canceled_exception.dart';
@@ -17,6 +18,7 @@ export 'package:sbb_oidc/src/oidc_client.dart';
 export 'package:sbb_oidc/src/oidc_token.dart';
 export 'package:sbb_oidc/src/openid_provider_metadata.dart';
 export 'package:sbb_oidc/src/sbb_discovery_url.dart';
+export 'package:sbb_oidc/src/token_accessibility.dart';
 export 'package:sbb_oidc/src/user_info.dart';
 
 class SBBOpenIDConnect {
@@ -30,6 +32,7 @@ class SBBOpenIDConnect {
   /// - [redirectUrl]: The URL where the server redirects after authentication
   /// - [postLogoutRedirectUrl]: Optional URL for redirect after logout
   /// - [httpClient]: Optional custom HTTP client for requests
+  /// - [tokenAccessibility]: Optional accessibility level of tokens
   ///
   /// Returns a configured [OidcClient] ready for authentication operations.
   static Future<OidcClient> createClient({
@@ -38,6 +41,7 @@ class SBBOpenIDConnect {
     required String redirectUrl,
     String? postLogoutRedirectUrl,
     Client? httpClient,
+    TokenAccessibility? tokenAccessibility,
   }) async {
     // Get the OpenID Connect provider configuration from the discovery
     // endpoint.
@@ -52,7 +56,9 @@ class SBBOpenIDConnect {
       postLogoutRedirectUrl: postLogoutRedirectUrl,
       providerConfiguration: providerConfiguration,
       redirectUrl: redirectUrl,
-      tokenStore: const TokenStore(),
+      tokenStore: TokenStore(
+        accessibility: tokenAccessibility ?? TokenAccessibility.whenUnlocked,
+      ),
     );
   }
 }

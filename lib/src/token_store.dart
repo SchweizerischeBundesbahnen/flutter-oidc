@@ -2,9 +2,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sbb_oidc/sbb_oidc.dart';
 
 class TokenStore {
-  const TokenStore();
+  const TokenStore._(this._storage);
 
-  final _storage = const FlutterSecureStorage();
+  factory TokenStore({required TokenAccessibility accessibility}) {
+    final storage = FlutterSecureStorage(
+      iOptions: IOSOptions(
+        accessibility: accessibility.toKeychainAccessibility(),
+      ),
+    );
+    return TokenStore._(storage);
+  }
+
+  final FlutterSecureStorage _storage;
 
   Future<OidcToken?> read(String key) async {
     final jsonString = await _storage.read(key: key);
@@ -39,5 +48,20 @@ class TokenStore {
 
   Future<void> deleteAll() {
     return _storage.deleteAll();
+  }
+}
+
+extension _TokenAccessibilityX on TokenAccessibility {
+  KeychainAccessibility toKeychainAccessibility() {
+    switch (this) {
+      case TokenAccessibility.whenUnlocked:
+        return KeychainAccessibility.unlocked;
+      case TokenAccessibility.whenUnlockedThisDeviceOnly:
+        return KeychainAccessibility.unlocked_this_device;
+      case TokenAccessibility.afterFirstUnlock:
+        return KeychainAccessibility.first_unlock;
+      case TokenAccessibility.afterFirstUnlockThisDeviceOnly:
+        return KeychainAccessibility.first_unlock_this_device;
+    }
   }
 }
