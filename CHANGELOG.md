@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Make token accessibility configurable on iOS.
+
 ## [4.0.1]
 
 - Export SBB Discovery URLs
