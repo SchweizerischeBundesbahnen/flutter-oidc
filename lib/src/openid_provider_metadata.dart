@@ -7,10 +7,7 @@ import 'package:meta/meta.dart';
 part 'openid_provider_metadata.g.dart';
 
 /// https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  explicitToJson: true,
-)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @sealed
 @immutable
 class OpenIDProviderMetadata {
@@ -87,7 +84,12 @@ class OpenIDProviderMetadata {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
     const listEquality = ListEquality();
     return other is OpenIDProviderMetadata &&
         authorizationEndpoint == other.authorizationEndpoint &&

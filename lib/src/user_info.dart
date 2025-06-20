@@ -11,10 +11,7 @@ part 'user_info.g.dart';
 /// - https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
 /// - https://openid.net/specs/openid-connect-core-1_0.html#UserInfo
 /// - https://learn.microsoft.com/en-us/azure/active-directory/develop/userinfo
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  explicitToJson: true,
-)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @sealed
 @immutable
 class UserInfo {
@@ -68,7 +65,12 @@ class UserInfo {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
     return other is UserInfo &&
         other.sub == sub &&
         other.name == name &&
@@ -80,14 +82,7 @@ class UserInfo {
 
   @override
   int get hashCode {
-    return Object.hash(
-      sub,
-      name,
-      familyName,
-      givenName,
-      picture,
-      email,
-    );
+    return Object.hash(sub, name, familyName, givenName, picture, email);
   }
 
   @override

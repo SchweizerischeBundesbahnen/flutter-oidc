@@ -1,10 +1,10 @@
 name: sbb_oidc_example
 description: Demonstrates how to use the sbb_oidc plugin.
 publish_to: 'none'
-version: 4.0.1
+version: 4.2.0
 
 environment:
-  sdk: ^3.6.0
+  sdk: ^3.8.1
 
 dependencies:
   flutter:
@@ -12,7 +12,7 @@ dependencies:
   sbb_oidc:
     path: ../
   # https://pub.dev/packages/collection
-  collection: ^1.19.0
+  collection: ^1.19.1
   # https://pub.dev/packages/fimber
   fimber: ^0.7.0
   # https://pub.dev/packages/flutter_dotenv
@@ -22,19 +22,19 @@ dependencies:
   # https://pub.dev/packages/get_it
   get_it: ^8.0.3
   # https://pub.dev/packages/http
-  http: ^1.2.2
+  http: ^1.4.0
   # https://pub.dev/packages/meta
-  meta: ^1.15.0
+  meta: ^1.16.0
   # https://pub.dev/packages/rxdart
   rxdart: ^0.28.0
   # https://pub.dev/packages/sbb_design_system_mobile
-  sbb_design_system_mobile: ^2.1.1
+  sbb_design_system_mobile: ^3.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   # https://pub.dev/packages/flutter_lints
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true
