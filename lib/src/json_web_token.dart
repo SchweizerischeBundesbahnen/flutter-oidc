@@ -82,7 +82,12 @@ class JsonWebToken {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
     return other is JsonWebToken &&
         const MapEquality().equals(header, header) &&
         const MapEquality().equals(payload, payload) &&

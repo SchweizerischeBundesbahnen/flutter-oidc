@@ -6,10 +6,7 @@ import 'package:meta/meta.dart';
 part 'oidc_token.g.dart';
 
 /// Holds authentication data after login.
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  explicitToJson: true,
-)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @sealed
 @immutable
 class OidcToken {
@@ -98,7 +95,12 @@ class OidcToken {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
     return other is OidcToken &&
         tokenType == other.tokenType &&
         accessToken == other.accessToken &&
