@@ -1,7 +1,7 @@
 name: sbb_oidc_example
 description: Demonstrates how to use the sbb_oidc plugin.
 publish_to: 'none'
-version: 4.0.1
+version: 4.2.0
 
 environment:
   sdk: ^3.8.1

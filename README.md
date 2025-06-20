@@ -167,7 +167,7 @@ Go to the [Info.plist][12] for your iOS app to specify the custom scheme. There 
 Add `sbb_oidc` as a dependency in your [pubspec.yaml][14] file.
 
 ```yaml
-sbb_oidc: ^4.1.0
+sbb_oidc: ^4.2.0
 ```
 
 <a name="create-oidc-client"></a>
@@ -364,5 +364,5 @@ See [example app][15].
 [16]: example/android/app/src/main/res/xml/backup_rules.xml
 [17]: example/android/app/src/main/res/xml/data_extraction_rules.xml
 [20]: sbb_oidc/lib/src/sbb_discovery_url.dart
-[30]: sbb_oidc_platform_interface/lib/src/types/oidc_token.dart
-[31]: sbb_oidc_platform_interface/lib/src/exceptions/multi_factor_authentication_exception.dart
+[30]: sbb_oidc/lib/src/oidc_token.dart
+[31]: sbb_oidc/lib/src/exceptions/multi_factor_authentication_exception.dart
