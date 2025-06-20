@@ -7,7 +7,7 @@ topics: [ authentication, oidc ]
 version: 4.1.0
 
 environment:
-  sdk: ^3.6.0
+  sdk: ^3.8.1
 
 dependencies:
   flutter:
