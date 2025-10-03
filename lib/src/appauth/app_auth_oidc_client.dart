@@ -17,6 +17,7 @@ class AppAuthOidcClient implements OidcClient {
     required this.providerConfiguration,
     required this.redirectUrl,
     required this.tokenStore,
+    required this.installationId,
   });
 
   final String clientId;
@@ -25,6 +26,7 @@ class AppAuthOidcClient implements OidcClient {
   final OpenIDProviderMetadata providerConfiguration;
   final String redirectUrl;
   final TokenStore tokenStore;
+  final String installationId;
 
   final _appAuth = const FlutterAppAuth();
 
@@ -97,18 +99,14 @@ class AppAuthOidcClient implements OidcClient {
   }
 
   @override
-  Future<UserInfo> getUserInfo({
-    required List<String> scopes,
-  }) async {
+  Future<UserInfo> getUserInfo({required List<String> scopes}) async {
     // Get the OIDC token.
     final token = await getToken(scopes: scopes);
     // Request the user info.
     final url = Uri.parse(providerConfiguration.userinfoEndpoint);
     final response = await httpClient.get(
       url,
-      headers: {
-        'Authorization': '${token.tokenType} ${token.accessToken}',
-      },
+      headers: {'Authorization': '${token.tokenType} ${token.accessToken}'},
     );
     // Handle errors.
     if (response.statusCode != HttpStatus.ok) {
@@ -159,7 +157,11 @@ class AppAuthOidcClient implements OidcClient {
     if (scopes.isEmpty) {
       throw ArgumentError('Scopes must be not empty.');
     }
-    return [providerConfiguration.issuer, clientId, ...scopes].join(' ');
+    var elements = [providerConfiguration.issuer, clientId, ...scopes];
+    if (installationId.isNotEmpty) {
+      elements.insert(0, installationId);
+    }
+    return elements.join(' ');
   }
 
   Future<OidcToken> _authorizeInteractive(
@@ -211,9 +213,7 @@ class AppAuthOidcClient implements OidcClient {
     throw exceptions;
   }
 
-  Future<OidcToken> _refreshToken(
-    String refreshToken,
-  ) async {
+  Future<OidcToken> _refreshToken(String refreshToken) async {
     final request = TokenRequest(
       clientId,
       redirectUrl,

@@ -33,6 +33,7 @@ class SBBOpenIDConnect {
   /// - [postLogoutRedirectUrl]: Optional URL for redirect after logout
   /// - [httpClient]: Optional custom HTTP client for requests
   /// - [tokenAccessibility]: Optional accessibility level of tokens
+  /// - [installationId]: Optional installation ID of the app
   ///
   /// Returns a configured [OidcClient] ready for authentication operations.
   static Future<OidcClient> createClient({
@@ -42,6 +43,7 @@ class SBBOpenIDConnect {
     String? postLogoutRedirectUrl,
     Client? httpClient,
     TokenAccessibility? tokenAccessibility,
+    String? installationId,
   }) async {
     // Get the OpenID Connect provider configuration from the discovery
     // endpoint.
@@ -59,6 +61,7 @@ class SBBOpenIDConnect {
       tokenStore: TokenStore(
         accessibility: tokenAccessibility ?? TokenAccessibility.whenUnlocked,
       ),
+      installationId: installationId ?? '',
     );
   }
 }
