@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.3.0]
+
+- Add optional app installation id parameter to OIDC client factory method
+
 ## [4.2.0]
 
 - Update Dart version to 3.8.1

@@ -17,6 +17,7 @@ class AppAuthOidcClient implements OidcClient {
     required this.providerConfiguration,
     required this.redirectUrl,
     required this.tokenStore,
+    required this.installationId,
   });
 
   final String clientId;
@@ -25,8 +26,10 @@ class AppAuthOidcClient implements OidcClient {
   final OpenIDProviderMetadata providerConfiguration;
   final String redirectUrl;
   final TokenStore tokenStore;
+  final String installationId;
 
   final _appAuth = const FlutterAppAuth();
+  late final _tokenKeyPrefix = _generateTokenKeyPrefix();
 
   AuthorizationServiceConfiguration get authorizationServiceConfiguration {
     return AuthorizationServiceConfiguration(
@@ -65,7 +68,9 @@ class AppAuthOidcClient implements OidcClient {
     // Request a new token silently (no user interaction) if the token store
     // contains no token for the key.
     if (token == null) {
-      final tokens = await tokenStore.readAll();
+      final tokens = await tokenStore.readWhere(
+        (key) => key.startsWith(_tokenKeyPrefix),
+      );
       if (tokens.isEmpty) {
         throw StateError('User is not authenticated.');
       }
@@ -97,18 +102,14 @@ class AppAuthOidcClient implements OidcClient {
   }
 
   @override
-  Future<UserInfo> getUserInfo({
-    required List<String> scopes,
-  }) async {
+  Future<UserInfo> getUserInfo({required List<String> scopes}) async {
     // Get the OIDC token.
     final token = await getToken(scopes: scopes);
     // Request the user info.
     final url = Uri.parse(providerConfiguration.userinfoEndpoint);
     final response = await httpClient.get(
       url,
-      headers: {
-        'Authorization': '${token.tokenType} ${token.accessToken}',
-      },
+      headers: {'Authorization': '${token.tokenType} ${token.accessToken}'},
     );
     // Handle errors.
     if (response.statusCode != HttpStatus.ok) {
@@ -131,7 +132,9 @@ class AppAuthOidcClient implements OidcClient {
 
   @override
   Future<void> endSession() async {
-    final tokens = await tokenStore.readAll();
+    final tokens = await tokenStore.readWhere(
+      (key) => key.startsWith(_tokenKeyPrefix),
+    );
     if (tokens.isEmpty) return;
     // Get all id tokens
     final idTokens = <String>{};
@@ -155,11 +158,19 @@ class AppAuthOidcClient implements OidcClient {
     }
   }
 
+  String _generateTokenKeyPrefix() {
+    return [
+      if (installationId.isNotEmpty) installationId,
+      providerConfiguration.issuer,
+      clientId,
+    ].join(' ');
+  }
+
   String _generateTokenKey(List<String> scopes) {
     if (scopes.isEmpty) {
       throw ArgumentError('Scopes must be not empty.');
     }
-    return [providerConfiguration.issuer, clientId, ...scopes].join(' ');
+    return [_tokenKeyPrefix, ...scopes].join(' ');
   }
 
   Future<OidcToken> _authorizeInteractive(
@@ -211,9 +222,7 @@ class AppAuthOidcClient implements OidcClient {
     throw exceptions;
   }
 
-  Future<OidcToken> _refreshToken(
-    String refreshToken,
-  ) async {
+  Future<OidcToken> _refreshToken(String refreshToken) async {
     final request = TokenRequest(
       clientId,
       redirectUrl,

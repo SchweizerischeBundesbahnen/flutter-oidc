@@ -30,21 +30,14 @@ void main() {
 
     final httpClient = MockClient();
     when(
-      httpClient.get(
-        Uri.parse(_kUserInfoUrl),
-        headers: anyNamed('headers'),
-      ),
-    ).thenAnswer(
-      (_) async {
-        return Response.bytes(
-          utf8.encode(userInfo.toJsonString()),
-          200,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        );
-      },
-    );
+      httpClient.get(Uri.parse(_kUserInfoUrl), headers: anyNamed('headers')),
+    ).thenAnswer((_) async {
+      return Response.bytes(
+        utf8.encode(userInfo.toJsonString()),
+        200,
+        headers: {'Content-Type': 'application/json'},
+      );
+    });
 
     final oidcClient = AppAuthOidcClient(
       clientId: 'clientId_12345',
@@ -53,6 +46,7 @@ void main() {
       providerConfiguration: _mockProviderConfiguration(),
       redirectUrl: 'sbb_oidc://test/redirect',
       tokenStore: _mockTokenStore(),
+      installationId: 'test',
     );
 
     final userInfo2 = await oidcClient.getUserInfo(scopes: ['user.read']);
