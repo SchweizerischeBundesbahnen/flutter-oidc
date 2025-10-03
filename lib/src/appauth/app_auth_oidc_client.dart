@@ -29,6 +29,7 @@ class AppAuthOidcClient implements OidcClient {
   final String installationId;
 
   final _appAuth = const FlutterAppAuth();
+  late final _tokenKeyPrefix = _generateTokenKeyPrefix();
 
   AuthorizationServiceConfiguration get authorizationServiceConfiguration {
     return AuthorizationServiceConfiguration(
@@ -67,7 +68,9 @@ class AppAuthOidcClient implements OidcClient {
     // Request a new token silently (no user interaction) if the token store
     // contains no token for the key.
     if (token == null) {
-      final tokens = await tokenStore.readAll();
+      final tokens = await tokenStore.readWhere(
+        (key) => key.startsWith(_tokenKeyPrefix),
+      );
       if (tokens.isEmpty) {
         throw StateError('User is not authenticated.');
       }
@@ -129,7 +132,9 @@ class AppAuthOidcClient implements OidcClient {
 
   @override
   Future<void> endSession() async {
-    final tokens = await tokenStore.readAll();
+    final tokens = await tokenStore.readWhere(
+      (key) => key.startsWith(_tokenKeyPrefix),
+    );
     if (tokens.isEmpty) return;
     // Get all id tokens
     final idTokens = <String>{};
@@ -153,15 +158,19 @@ class AppAuthOidcClient implements OidcClient {
     }
   }
 
+  String _generateTokenKeyPrefix() {
+    return [
+      if (installationId.isNotEmpty) installationId,
+      providerConfiguration.issuer,
+      clientId,
+    ].join(' ');
+  }
+
   String _generateTokenKey(List<String> scopes) {
     if (scopes.isEmpty) {
       throw ArgumentError('Scopes must be not empty.');
     }
-    var elements = [providerConfiguration.issuer, clientId, ...scopes];
-    if (installationId.isNotEmpty) {
-      elements.insert(0, installationId);
-    }
-    return elements.join(' ');
+    return [_tokenKeyPrefix, ...scopes].join(' ');
   }
 
   Future<OidcToken> _authorizeInteractive(

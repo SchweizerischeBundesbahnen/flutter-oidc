@@ -23,10 +23,21 @@ class TokenStore {
     return OidcToken.fromJsonString(jsonString);
   }
 
-  Future<Map<String, OidcToken>> readAll() async {
+  /// Reads all entries from the storage whose keys satisfy the given [test]
+  /// function, and attempts to parse them as [OidcToken] objects.
+  ///
+  /// Returns a [Future] that completes with the filtered and parsed tokens.
+  Future<Map<String, OidcToken>> readWhere(
+    bool Function(String key) test,
+  ) async {
     final data = await _storage.readAll();
     final tokens = <String, OidcToken>{};
     for (var entry in data.entries) {
+      final key = entry.key;
+      if (!test(key)) {
+        // Ignore because the token key does not satisfy test.
+        continue;
+      }
       try {
         tokens[entry.key] = OidcToken.fromJsonString(entry.value);
       } catch (e) {
