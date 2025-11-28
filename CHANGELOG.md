@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.4.0]
+
+- Updated Dart version to 3.10.0
+- Updated Flutter version to 3.38.3
+- Updated all dependencies to latest versions
+
 ## [4.3.0]
 
 - Add optional app installation id parameter to OIDC client factory method

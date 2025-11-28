@@ -34,7 +34,6 @@ class UserInfoView extends StatelessWidget {
             SBBGroup(
               margin: const EdgeInsetsDirectional.symmetric(horizontal: 8),
               padding: const EdgeInsetsDirectional.all(16),
-              useShadow: true,
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
                 child: child,

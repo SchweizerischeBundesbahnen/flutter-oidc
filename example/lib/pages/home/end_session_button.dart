@@ -40,7 +40,7 @@ class _EndSessionButtonState extends State<EndSessionButton> {
       } catch (e) {
         Fimber.e('End session failed', ex: e);
         if (context.mounted) {
-          SBBToast.of(context).show(message: 'End session failed.');
+          SBBToast.of(context).show(title: 'End session failed.');
         }
       }
     }

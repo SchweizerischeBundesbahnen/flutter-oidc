@@ -38,7 +38,7 @@ class _LogoutButtonState extends State<LogoutButton> {
     } catch (e) {
       Fimber.e('Logout failed', ex: e);
       if (context.mounted) {
-        SBBToast.of(context).show(message: 'Logout failed.');
+        SBBToast.of(context).show(title: 'Logout failed.');
       }
     }
 
