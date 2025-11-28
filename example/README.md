@@ -10,8 +10,10 @@ This app uses the [dotenv] package to load configuration at runtime from an `.en
 DISCOVERY_URL=<The discovery url of your azure ad identity provider>
 CLIENT_ID=<The client id of your app>
 SCOPES=<The scopes that your app requires>
-MOBILE_REDIRECT_URL=<The redirect url of your mobile app>
+REDIRECT_URL=<The redirect url of your mobile app>
 ```
+
+Extend the intent filter for `RedirectUriReceiverActivity` in `AndroidManifest.xml` if needed.
 
 If you want to use other flavors you must create one `.env` file for each flavor. The content of the files may differ. Check the authenticator config factory functions defined in [flavor] to find out the exact content for each flavor.
 

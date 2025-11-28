@@ -176,7 +176,7 @@ class _State extends State<OidcTokenView> {
     await Clipboard.setData(clipboardData);
     if (context.mounted) {
       SBBToast.of(context).show(
-        message: 'OIDC token copied to clipboard.',
+        title: 'OIDC token copied to clipboard.',
       );
     }
   }

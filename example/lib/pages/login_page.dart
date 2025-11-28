@@ -101,7 +101,7 @@ class _State extends State<LoginPage> {
     } catch (e) {
       Fimber.d('Login failed', ex: e);
       if (mounted) {
-        SBBToast.of(context).show(message: 'Login failed.');
+        SBBToast.of(context).show(title: 'Login failed.');
       }
     }
 
