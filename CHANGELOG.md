@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.5.0]
+
+- Updated Dart version to 3.11.4
+- Updated Flutter version to 3.41.6
+- Updated all dependencies to latest versions
+
 ## [4.4.0]
 
 - Updated Dart version to 3.10.0
