@@ -9,10 +9,7 @@ import 'package:sbb_oidc_example/di.dart';
 import 'package:sbb_oidc_example/pages/home/json_web_token_list_tile.dart';
 
 class OidcTokenView extends StatefulWidget {
-  const OidcTokenView({
-    super.key,
-    required this.tokenId,
-  });
+  const OidcTokenView({super.key, required this.tokenId});
 
   final String tokenId;
 
@@ -105,7 +102,7 @@ class _State extends State<OidcTokenView> {
 
     final textTheme = Theme.of(context).textTheme;
     return SingleChildScrollView(
-      child: SBBGroup(
+      child: SBBContentBox(
         margin: const EdgeInsetsDirectional.all(16),
         padding: const EdgeInsetsDirectional.all(16),
         child: Column(
@@ -126,7 +123,7 @@ class _State extends State<OidcTokenView> {
   Widget _body(BuildContext context, OidcToken token) {
     return ListView(
       children: [
-        SBBGroup(
+        SBBContentBox(
           margin: const EdgeInsetsDirectional.fromSTEB(8, 16, 8, 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -175,9 +172,7 @@ class _State extends State<OidcTokenView> {
     final clipboardData = ClipboardData(text: jsonString);
     await Clipboard.setData(clipboardData);
     if (context.mounted) {
-      SBBToast.of(context).show(
-        title: 'OIDC token copied to clipboard.',
-      );
+      SBBToast.of(context).show(title: 'OIDC token copied to clipboard.');
     }
   }
 }
@@ -191,16 +186,13 @@ class _ErrorViews {
     required Function(BuildContext context) onEnterSecondFactorPressed,
   }) {
     return SingleChildScrollView(
-      child: SBBGroup(
+      child: SBBContentBox(
         margin: const EdgeInsetsDirectional.all(16),
         padding: const EdgeInsetsDirectional.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'ERROR',
-              style: SBBTextStyles.largeLight,
-            ),
+            const Text('ERROR', style: SBBTextStyles.largeLight),
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
               child: const Text(
@@ -235,16 +227,13 @@ class _ErrorViews {
     required Function(BuildContext context) onRetryPressed,
   }) {
     return SingleChildScrollView(
-      child: SBBGroup(
+      child: SBBContentBox(
         margin: const EdgeInsetsDirectional.all(16),
         padding: const EdgeInsetsDirectional.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Network error',
-              style: SBBTextStyles.largeLight,
-            ),
+            const Text('Network error', style: SBBTextStyles.largeLight),
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
               child: Text(

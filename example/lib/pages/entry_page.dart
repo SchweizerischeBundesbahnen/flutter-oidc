@@ -12,9 +12,7 @@ class EntryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _body(context),
-    );
+    return Scaffold(body: _body(context));
   }
 
   Widget _body(BuildContext context) {
@@ -38,10 +36,7 @@ class EntryPage extends StatelessWidget {
 
           // The navigation should happen delayed so that this method can
           // finish.
-          Future.delayed(
-            const Duration(milliseconds: 500),
-            () => navigate(),
-          );
+          Future.delayed(const Duration(milliseconds: 500), () => navigate());
         }
 
         return _loading();
@@ -63,7 +58,7 @@ class EntryPage extends StatelessWidget {
 extension _BuildContextExt on BuildContext {
   void navigateToHomePage() {
     final routeBuilder = PageRouteBuilder(
-      pageBuilder: (context, _, __) => const HomePage(),
+      pageBuilder: (context, _, _) => const HomePage(),
       transitionDuration: const Duration(seconds: 0),
     );
 
@@ -73,7 +68,7 @@ extension _BuildContextExt on BuildContext {
   void navigateToLoginPage() {
     final routeBuilder = PageRouteBuilder(
       settings: const RouteSettings(name: LoginPage.routeName),
-      pageBuilder: (context, _, __) => const LoginPage(),
+      pageBuilder: (context, _, _) => const LoginPage(),
       transitionDuration: const Duration(seconds: 0),
     );
 
