@@ -31,7 +31,7 @@ class UserInfoView extends StatelessWidget {
               color: SBBColors.red,
               height: 39,
             ),
-            SBBGroup(
+            SBBContentBox(
               margin: const EdgeInsetsDirectional.symmetric(horizontal: 8),
               padding: const EdgeInsetsDirectional.all(16),
               child: AnimatedSwitcher(
