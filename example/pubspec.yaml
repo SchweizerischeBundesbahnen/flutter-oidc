@@ -20,15 +20,15 @@ dependencies:
   # https://pub.dev/packages/flutter_json_view
   flutter_json_view: ^1.1.5
   # https://pub.dev/packages/get_it
-  get_it: ^9.1.1
+  get_it: ^9.2.1
   # https://pub.dev/packages/http
   http: ^1.6.0
   # https://pub.dev/packages/meta
-  meta: ^1.16.0
+  meta: ^1.17.0
   # https://pub.dev/packages/rxdart
   rxdart: ^0.28.0
   # https://pub.dev/packages/sbb_design_system_mobile
-  sbb_design_system_mobile: ^4.3.1
+  sbb_design_system_mobile: ^4.9.0
 
 dev_dependencies:
   flutter_test:
