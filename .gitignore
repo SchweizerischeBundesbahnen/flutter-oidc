@@ -92,3 +92,7 @@ google-services.json
 .flutter-plugins
 .flutter-plugins-dependencies
 pubspec.lock
+
+# Test data
+test_data/jwt/
+test_data/oidc_token/
