@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        // AGP 9's built-in Kotlin defaults to 2.2.10; bump to satisfy Flutter's minimum of 2.2.20.
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.20")
+    }
+}
+
 allprojects {
     repositories {
         google()

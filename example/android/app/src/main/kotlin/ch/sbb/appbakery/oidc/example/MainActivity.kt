@@ -1,4 +1,4 @@
-package ch.sbb.mf.esta_mobile_flutter_oidc_example
+package ch.sbb.appbakery.oidc.example
 
 import io.flutter.embedding.android.FlutterActivity
 
