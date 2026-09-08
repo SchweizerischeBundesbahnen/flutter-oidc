@@ -36,3 +36,12 @@ dev_dependencies:
   json_serializable: ^6.13.1
   # https://pub.dev/packages/mockito
   mockito: ^5.6.4
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: ch.sbb.appbakery.oidc
+        pluginClass: SbbOidcPlugin
+      ios:
+        pluginClass: SbbOidcPlugin
