@@ -1,6 +1,16 @@
 group = "ch.sbb.appbakery.oidc"
 version = "1.0-SNAPSHOT"
 
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1")
+        }
+    }
+}
+
 plugins {
     id("com.android.library")
 }
@@ -30,13 +40,6 @@ kotlin {
 }
 
 dependencies {
-    // MSAL Android: https://github.com/AzureAD/microsoft-authentication-library-for-android
-    api("com.microsoft.identity.client:msal:8.4.2") {
-        // Avoids requiring the Duo SDK Maven feed for the unused Surface Duo dual-screen support.
-        // See:
-        // - https://github.com/AzureAD/microsoft-authentication-library-for-android/issues/1027
-        // - https://github.com/AzureAD/microsoft-authentication-library-common-for-android/pull/2873
-        exclude(group = "com.microsoft.device.display")
-    }
+    api("com.microsoft.identity.client:msal:8.5.0")
     implementation("androidx.browser:browser:1.10.0")
 }
