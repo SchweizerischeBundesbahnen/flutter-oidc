@@ -5,91 +5,85 @@ import 'package:meta/meta.dart';
 
 part 'oidc_token.g.dart';
 
-/// Holds authentication data after login.
+/// Authentication data returned by a successful login or token request.
+///
+/// OIDC tokens are sensitive credentials. Use them only for their intended
+/// purpose and avoid logging, persisting, or serializing them outside of a
+/// trusted boundary.
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @sealed
 @immutable
 class OidcToken {
   const OidcToken({
-    required this.tokenType,
     required this.accessToken,
     this.accessTokenExpirationDateTime,
-    this.refreshToken,
-    required this.idToken,
+    required this.accessTokenType,
+    this.idToken,
   });
 
-  /// Creates an [OidcToken] from a json string.
+  /// Creates an OIDC token from a JSON string.
   factory OidcToken.fromJsonString(String jsonString) {
     final json = jsonDecode(jsonString);
     return OidcToken.fromJson(json);
   }
 
-  /// Creates an [OidcToken] from json.
+  /// Creates an OIDC token from JSON.
   factory OidcToken.fromJson(Map<String, dynamic> json) {
     return _$OidcTokenFromJson(json);
   }
 
-  // The type of token returned by the authorization server.
-  final String tokenType;
-
-  /// The access token issued by the authorization server, and used by a client
-  /// application in order to access a protected API.
+  /// The access token issued by the authorization server.
   ///
-  /// Access tokens are only valid for a short period of time. An authorization
-  /// server may also issue a refresh token when the access token is issued.
+  /// Access tokens are short-lived and grant access to protected resources. Do
+  /// not store or cache this token in the client application. Request a token
+  /// from the OIDC client when needed so that the OIDC client can automatically
+  /// refresh it when necessary.
   ///
   /// https://docs.microsoft.com/en-us/azure/active-directory/develop/access-tokens
   final String accessToken;
 
-  /// Indicates when [accessToken] will expire.
+  /// Indicates when the access token expires.
   final DateTime? accessTokenExpirationDateTime;
 
-  /// The refresh token issued by the authorization server.
-  ///
-  /// When a client acquires an access token to access a protected API, the
-  /// client also receives a refresh token. The refresh token is used to obtain
-  /// new access/refresh token pairs when the current access token expires.
-  /// Refresh tokens are also used to acquire extra access tokens for other
-  /// APIs.
-  ///
-  /// Refresh tokens can be revoked at any time. The client application must
-  /// handle rejections gracefully when this occurs. This is done by sending
-  /// the user to an interactive login prompt to sign in again.
-  ///
-  /// NOTE. On Web the refresh tokens are always null.
-  ///
-  /// https://docs.microsoft.com/en-us/azure/active-directory/develop/refresh-tokens
-  final String? refreshToken;
+  /// The type of access token returned by the authorization server.
+  final String accessTokenType;
 
   /// The ID token issued by the authorization server.
   ///
-  /// ID tokens Contain claims that carry information about the user.
-  /// Information in ID tokens allows the client to verify that a user is who
-  /// they claim to be. The claims provided by ID tokens can be used for UX
-  /// inside client applications.
+  /// An ID token contains identity claims about the authenticated user and is
+  /// intended for the client application. It is not an access token and must
+  /// not be used to authorize requests to protected APIs.
   ///
   /// https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens
-  final String idToken;
+  final String? idToken;
 
-  /// The expired state of the access token.
-  bool? get isExpired {
-    if (accessTokenExpirationDateTime == null) {
-      return null;
+  /// Converts this OIDC token to JSON.
+  ///
+  /// By default, the returned map contains sensitive token data. Do not log,
+  /// persist, or expose it outside a trusted boundary. Set [masked] to `true`
+  /// when the serialized data is intended for diagnostic output.
+  Map<String, dynamic> toJson({bool masked = false}) {
+    if (masked) {
+      final copy = OidcToken(
+        accessToken: accessToken.mask(),
+        accessTokenExpirationDateTime: accessTokenExpirationDateTime,
+        accessTokenType: accessTokenType,
+        idToken: idToken?.mask(),
+      );
+      return copy.toJson();
     } else {
-      final now = DateTime.now();
-      return accessTokenExpirationDateTime!.isBefore(now);
+      return _$OidcTokenToJson(this);
     }
   }
 
-  /// Converts this [OidcToken] to json.
-  Map<String, dynamic> toJson() {
-    return _$OidcTokenToJson(this);
-  }
-
-  /// Converts this [OidcToken] to a json string.
-  String toJsonString({bool pretty = false}) {
+  /// Converts this OIDC token to a JSON string.
+  ///
+  /// By default, the returned string contains sensitive token data. Do not
+  /// log, persist, or expose it outside a trusted boundary. Set [masked] to
+  /// `true` when the serialized data is intended for diagnostic output.
+  String toJsonString({bool masked = false, bool pretty = false}) {
     final encoder = JsonEncoder.withIndent(pretty ? ' ' * 2 : null);
-    final json = toJson();
+    final json = toJson(masked: masked);
     return encoder.convert(json);
   }
 
@@ -102,27 +96,43 @@ class OidcToken {
       return false;
     }
     return other is OidcToken &&
-        tokenType == other.tokenType &&
-        accessToken == other.accessToken &&
-        accessTokenExpirationDateTime == other.accessTokenExpirationDateTime &&
-        refreshToken == other.refreshToken &&
-        idToken == other.idToken;
+        other.accessToken == accessToken &&
+        other.accessTokenExpirationDateTime == accessTokenExpirationDateTime &&
+        other.accessTokenType == accessTokenType &&
+        other.idToken == idToken;
   }
 
   @override
   int get hashCode {
     return Object.hash(
-      tokenType,
       accessToken,
       accessTokenExpirationDateTime,
-      refreshToken,
+      accessTokenType,
       idToken,
     );
   }
 
   @override
   String toString() {
-    final jsonString = toJsonString(pretty: true);
-    return 'OidcToken $jsonString';
+    final fields = [
+      'accessToken: ${accessToken.mask()}',
+      'accessTokenExpirationDateTime: $accessTokenExpirationDateTime',
+      'accessTokenType: $accessTokenType',
+      'idToken: ${idToken?.mask()}',
+    ];
+    return 'OidcToken(${fields.join(', ')})';
+  }
+}
+
+extension _StringX on String {
+  String mask() {
+    const minimumLength = 12;
+    if (length < minimumLength) {
+      return '***';
+    } else {
+      const visibleCharacterCount = 4;
+      final start = length - visibleCharacterCount;
+      return '***${substring(start)}';
+    }
   }
 }

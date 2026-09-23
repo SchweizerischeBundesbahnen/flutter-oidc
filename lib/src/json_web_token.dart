@@ -89,9 +89,9 @@ class JsonWebToken {
       return false;
     }
     return other is JsonWebToken &&
-        const MapEquality().equals(header, header) &&
-        const MapEquality().equals(payload, payload) &&
-        signature == other.signature;
+        const MapEquality().equals(other.header, header) &&
+        const MapEquality().equals(other.payload, payload) &&
+        other.signature == signature;
   }
 
   @override
