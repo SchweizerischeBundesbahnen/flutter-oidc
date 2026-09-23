@@ -337,16 +337,16 @@ data class GetTokenParameters (
 data class OidcTokenResponse (
   val accessToken: String,
   val authenticationScheme: String,
-  val expiresOn: String,
-  val idToken: String
+  val expiresOn: String? = null,
+  val idToken: String? = null
 )
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): OidcTokenResponse {
       val accessToken = pigeonVar_list[0] as String
       val authenticationScheme = pigeonVar_list[1] as String
-      val expiresOn = pigeonVar_list[2] as String
-      val idToken = pigeonVar_list[3] as String
+      val expiresOn = pigeonVar_list[2] as String?
+      val idToken = pigeonVar_list[3] as String?
       return OidcTokenResponse(accessToken, authenticationScheme, expiresOn, idToken)
     }
   }

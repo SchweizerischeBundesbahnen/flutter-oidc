@@ -218,7 +218,7 @@ private fun IAuthenticationResult.toOidcTokenResponse(): OidcTokenResponse {
         accessToken = accessToken,
         authenticationScheme = authenticationScheme,
         expiresOn = expiresOn.toIso8601String(),
-        idToken = account.idToken!!,
+        idToken = account.idToken,
     )
 }
 

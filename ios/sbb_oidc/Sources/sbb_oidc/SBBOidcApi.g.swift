@@ -323,16 +323,16 @@ struct GetTokenParameters: Hashable, CustomStringConvertible {
 struct OidcTokenResponse: Hashable, CustomStringConvertible {
   var accessToken: String
   var authenticationScheme: String
-  var expiresOn: String
-  var idToken: String
+  var expiresOn: String? = nil
+  var idToken: String? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> OidcTokenResponse? {
     let accessToken = pigeonVar_list[0] as! String
     let authenticationScheme = pigeonVar_list[1] as! String
-    let expiresOn = pigeonVar_list[2] as! String
-    let idToken = pigeonVar_list[3] as! String
+    let expiresOn: String? = nilOrValue(pigeonVar_list[2])
+    let idToken: String? = nilOrValue(pigeonVar_list[3])
 
     return OidcTokenResponse(
       accessToken: accessToken,

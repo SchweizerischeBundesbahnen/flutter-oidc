@@ -266,17 +266,17 @@ class OidcTokenResponse {
   OidcTokenResponse({
     required this.accessToken,
     required this.authenticationScheme,
-    required this.expiresOn,
-    required this.idToken,
+    this.expiresOn,
+    this.idToken,
   });
 
   String accessToken;
 
   String authenticationScheme;
 
-  String expiresOn;
+  String? expiresOn;
 
-  String idToken;
+  String? idToken;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -295,8 +295,8 @@ class OidcTokenResponse {
     return OidcTokenResponse(
       accessToken: result[0]! as String,
       authenticationScheme: result[1]! as String,
-      expiresOn: result[2]! as String,
-      idToken: result[3]! as String,
+      expiresOn: result[2] as String?,
+      idToken: result[3] as String?,
     );
   }
 

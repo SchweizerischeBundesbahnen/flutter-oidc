@@ -2,7 +2,7 @@ import 'package:pigeon/pigeon.dart';
 
 @ConfigurePigeon(
   PigeonOptions(
-    dartOut: 'lib/src/pigeon/sbb_oidc_api.g.dart',
+    dartOut: 'lib/src/sbb_oidc_api.g.dart',
     dartPackageName: 'sbb_oidc',
     kotlinOut: 'android/src/main/kotlin/ch/sbb/appbakery/oidc/SBBOidcApi.g.kt',
     kotlinOptions: KotlinOptions(
@@ -51,14 +51,14 @@ class OidcTokenResponse {
   OidcTokenResponse({
     required this.accessToken,
     required this.authenticationScheme,
-    required this.expiresOn,
-    required this.idToken,
+    this.expiresOn,
+    this.idToken,
   });
 
   final String accessToken;
   final String authenticationScheme;
-  final String expiresOn;
-  final String idToken;
+  final String? expiresOn;
+  final String? idToken;
 }
 
 @HostApi()
