@@ -96,3 +96,7 @@ pubspec.lock
 # Test data
 test_data/jwt/
 test_data/oidc_token/
+
+# Xcode user-specific state
+.swiftpm/xcode/xcuserdata/
+xcuserdata/
