@@ -57,6 +57,18 @@ class OidcToken {
   /// https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens
   final String? idToken;
 
+  /// The HTTP authorization header value for this OIDC token.
+  ///
+  /// Use this value as the value of an `Authorization` request header when
+  /// calling protected resources. It combines the access token type and the 
+  /// access token, for example: `Bearer <access token>`.
+  ///
+  /// This value contains sensitive token data. Do not log, persist, or expose
+  /// it outside a trusted boundary.
+  String get authorizationHeader {
+    return '$accessTokenType $accessToken';
+  }
+
   /// Converts this OIDC token to JSON.
   ///
   /// By default, the returned map contains sensitive token data. Do not log,
