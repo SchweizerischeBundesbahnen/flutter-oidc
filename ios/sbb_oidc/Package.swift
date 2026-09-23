@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "sbb_oidc",
     platforms: [
-        .iOS("15.0")
+        .iOS("17.0")
     ],
     products: [
         .library(name: "sbb-oidc", targets: ["sbb_oidc"])

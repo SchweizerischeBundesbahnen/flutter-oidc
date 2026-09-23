@@ -1,14 +1,24 @@
 import Flutter
 import UIKit
 
-public class SbbOidcPlugin: NSObject, FlutterPlugin {
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "sbb_oidc", binaryMessenger: registrar.messenger())
-    let instance = SbbOidcPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
+public class SBBOidcPlugin: NSObject, FlutterPlugin, FlutterApplicationLifeCycleDelegate {
+    private let api = SBBOidcHostApiImpl()
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    result(FlutterMethodNotImplemented)
-  }
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let instance = SBBOidcPlugin()
+        SBBOidcHostApiSetup.setUp(
+            binaryMessenger: registrar.messenger(),
+            api: instance.api
+        )
+        // MSAL needs to see the redirect URL that iOS forwards to the app delegate.
+        registrar.addApplicationDelegate(instance)
+    }
+
+    public func application(
+        _ app: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey: Any] = [:]
+    ) -> Bool {
+        api.handleOpen(url: url, options: options)
+    }
 }

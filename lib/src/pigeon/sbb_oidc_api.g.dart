@@ -100,11 +100,14 @@ int _deepHash(Object? value) {
 class InitializeParameters {
   InitializeParameters({
     required this.clientId,
+    required this.keychainAccessGroup,
     required this.redirectUri,
     required this.tenantId,
   });
 
   String clientId;
+
+  String keychainAccessGroup;
 
   String redirectUri;
 
@@ -113,6 +116,7 @@ class InitializeParameters {
   List<Object?> _toList() {
     return <Object?>[
       clientId,
+      keychainAccessGroup,
       redirectUri,
       tenantId,
     ];
@@ -125,8 +129,9 @@ class InitializeParameters {
     result as List<Object?>;
     return InitializeParameters(
       clientId: result[0]! as String,
-      redirectUri: result[1]! as String,
-      tenantId: result[2]! as String,
+      keychainAccessGroup: result[1]! as String,
+      redirectUri: result[2]! as String,
+      tenantId: result[3]! as String,
     );
   }
 
@@ -139,7 +144,7 @@ class InitializeParameters {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(clientId, other.clientId) && _deepEquals(redirectUri, other.redirectUri) && _deepEquals(tenantId, other.tenantId);
+    return _deepEquals(clientId, other.clientId) && _deepEquals(keychainAccessGroup, other.keychainAccessGroup) && _deepEquals(redirectUri, other.redirectUri) && _deepEquals(tenantId, other.tenantId);
   }
 
   @override
@@ -148,7 +153,7 @@ class InitializeParameters {
 
   @override
   String toString() {
-    return 'InitializeParameters(clientId: $clientId, redirectUri: $redirectUri, tenantId: $tenantId)';
+    return 'InitializeParameters(clientId: $clientId, keychainAccessGroup: $keychainAccessGroup, redirectUri: $redirectUri, tenantId: $tenantId)';
   }
 }
 

@@ -187,6 +187,7 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
 /// Generated class from Pigeon that represents data sent in messages.
 struct InitializeParameters: Hashable, CustomStringConvertible {
   var clientId: String
+  var keychainAccessGroup: String
   var redirectUri: String
   var tenantId: String
 
@@ -194,11 +195,13 @@ struct InitializeParameters: Hashable, CustomStringConvertible {
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> InitializeParameters? {
     let clientId = pigeonVar_list[0] as! String
-    let redirectUri = pigeonVar_list[1] as! String
-    let tenantId = pigeonVar_list[2] as! String
+    let keychainAccessGroup = pigeonVar_list[1] as! String
+    let redirectUri = pigeonVar_list[2] as! String
+    let tenantId = pigeonVar_list[3] as! String
 
     return InitializeParameters(
       clientId: clientId,
+      keychainAccessGroup: keychainAccessGroup,
       redirectUri: redirectUri,
       tenantId: tenantId
     )
@@ -206,6 +209,7 @@ struct InitializeParameters: Hashable, CustomStringConvertible {
   func toList() -> [Any?] {
     return [
       clientId,
+      keychainAccessGroup,
       redirectUri,
       tenantId,
     ]
@@ -214,18 +218,19 @@ struct InitializeParameters: Hashable, CustomStringConvertible {
     if Swift.type(of: lhs) != Swift.type(of: rhs) {
       return false
     }
-    return SBBOidcApiPigeonInternal.deepEquals(lhs.clientId, rhs.clientId) && SBBOidcApiPigeonInternal.deepEquals(lhs.redirectUri, rhs.redirectUri) && SBBOidcApiPigeonInternal.deepEquals(lhs.tenantId, rhs.tenantId)
+    return SBBOidcApiPigeonInternal.deepEquals(lhs.clientId, rhs.clientId) && SBBOidcApiPigeonInternal.deepEquals(lhs.keychainAccessGroup, rhs.keychainAccessGroup) && SBBOidcApiPigeonInternal.deepEquals(lhs.redirectUri, rhs.redirectUri) && SBBOidcApiPigeonInternal.deepEquals(lhs.tenantId, rhs.tenantId)
   }
 
   func hash(into hasher: inout Hasher) {
     hasher.combine("InitializeParameters")
     SBBOidcApiPigeonInternal.deepHash(value: clientId, hasher: &hasher)
+    SBBOidcApiPigeonInternal.deepHash(value: keychainAccessGroup, hasher: &hasher)
     SBBOidcApiPigeonInternal.deepHash(value: redirectUri, hasher: &hasher)
     SBBOidcApiPigeonInternal.deepHash(value: tenantId, hasher: &hasher)
   }
 
   public var description: String {
-    return "InitializeParameters(clientId: \(String(describing: clientId)), redirectUri: \(String(describing: redirectUri)), tenantId: \(String(describing: tenantId)))"
+    return "InitializeParameters(clientId: \(String(describing: clientId)), keychainAccessGroup: \(String(describing: keychainAccessGroup)), redirectUri: \(String(describing: redirectUri)), tenantId: \(String(describing: tenantId)))"
   }
 }
 

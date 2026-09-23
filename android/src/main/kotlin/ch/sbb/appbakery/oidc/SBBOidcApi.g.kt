@@ -201,6 +201,7 @@ class FlutterError (
 /** Generated class from Pigeon that represents data sent in messages. */
 data class InitializeParameters (
   val clientId: String,
+  val keychainAccessGroup: String,
   val redirectUri: String,
   val tenantId: String
 )
@@ -208,14 +209,16 @@ data class InitializeParameters (
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): InitializeParameters {
       val clientId = pigeonVar_list[0] as String
-      val redirectUri = pigeonVar_list[1] as String
-      val tenantId = pigeonVar_list[2] as String
-      return InitializeParameters(clientId, redirectUri, tenantId)
+      val keychainAccessGroup = pigeonVar_list[1] as String
+      val redirectUri = pigeonVar_list[2] as String
+      val tenantId = pigeonVar_list[3] as String
+      return InitializeParameters(clientId, keychainAccessGroup, redirectUri, tenantId)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       clientId,
+      keychainAccessGroup,
       redirectUri,
       tenantId,
     )
@@ -228,18 +231,19 @@ data class InitializeParameters (
       return true
     }
     val other = other as InitializeParameters
-    return SBBOidcApiPigeonUtils.deepEquals(this.clientId, other.clientId) && SBBOidcApiPigeonUtils.deepEquals(this.redirectUri, other.redirectUri) && SBBOidcApiPigeonUtils.deepEquals(this.tenantId, other.tenantId)
+    return SBBOidcApiPigeonUtils.deepEquals(this.clientId, other.clientId) && SBBOidcApiPigeonUtils.deepEquals(this.keychainAccessGroup, other.keychainAccessGroup) && SBBOidcApiPigeonUtils.deepEquals(this.redirectUri, other.redirectUri) && SBBOidcApiPigeonUtils.deepEquals(this.tenantId, other.tenantId)
   }
 
   override fun hashCode(): Int {
     var result = javaClass.hashCode()
     result = 31 * result + SBBOidcApiPigeonUtils.deepHash(this.clientId)
+    result = 31 * result + SBBOidcApiPigeonUtils.deepHash(this.keychainAccessGroup)
     result = 31 * result + SBBOidcApiPigeonUtils.deepHash(this.redirectUri)
     result = 31 * result + SBBOidcApiPigeonUtils.deepHash(this.tenantId)
     return result
   }
   override fun toString(): String {
-    return "InitializeParameters(clientId=$clientId, redirectUri=$redirectUri, tenantId=$tenantId)"
+    return "InitializeParameters(clientId=$clientId, keychainAccessGroup=$keychainAccessGroup, redirectUri=$redirectUri, tenantId=$tenantId)"
   }
 }
 

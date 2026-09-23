@@ -42,4 +42,4 @@ flutter:
         package: ch.sbb.appbakery.oidc
         pluginClass: SBBOidcPlugin
       ios:
-        pluginClass: SbbOidcPlugin
+        pluginClass: SBBOidcPlugin

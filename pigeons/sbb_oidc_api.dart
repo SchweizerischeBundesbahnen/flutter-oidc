@@ -14,11 +14,13 @@ import 'package:pigeon/pigeon.dart';
 class InitializeParameters {
   const InitializeParameters({
     required this.clientId,
+    required this.keychainAccessGroup,
     required this.redirectUri,
     required this.tenantId,
   });
 
   final String clientId;
+  final String keychainAccessGroup;
   final String redirectUri;
   final String tenantId;
 }

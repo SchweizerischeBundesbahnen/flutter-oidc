@@ -16,7 +16,7 @@ SBB OpenID Connect package for Flutter
   s.source_files = 'sbb_oidc/Sources/sbb_oidc/**/*'
   s.dependency 'Flutter'
   s.dependency 'MSAL', '2.15.0'
-  s.platform = :ios, '15.0'
+  s.platform = :ios, '17.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
