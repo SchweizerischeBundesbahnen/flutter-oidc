@@ -36,9 +36,10 @@ enum Flavor {
 
 AuthenticatorConfig _exampleAppAuthenticatorConfig() {
   return AuthenticatorConfig(
-    discoveryUrl: dotenv.env['DISCOVERY_URL']!,
     clientId: dotenv.env['CLIENT_ID']!,
+    keychainAccessGroup: dotenv.env['KEYCHAIN_ACCESS_GROUP']!,
     redirectUrl: dotenv.env['REDIRECT_URL']!,
+    tenantId: dotenv.env['TENANT_ID']!,
     tokenSpecs: TokenSpecProvider([
       TokenSpec(
         id: 'T1',
@@ -51,9 +52,10 @@ AuthenticatorConfig _exampleAppAuthenticatorConfig() {
 
 AuthenticatorConfig _esqMobileDevAuthenticatorConfig() {
   return AuthenticatorConfig(
-    discoveryUrl: dotenv.env['DISCOVERY_URL']!,
     clientId: dotenv.env['CLIENT_ID']!,
+    keychainAccessGroup: dotenv.env['KEYCHAIN_ACCESS_GROUP']!,
     redirectUrl: dotenv.env['REDIRECT_URL']!,
+    tenantId: dotenv.env['TENANT_ID']!,
     tokenSpecs: TokenSpecProvider([
       TokenSpec(
         id: 'T0',

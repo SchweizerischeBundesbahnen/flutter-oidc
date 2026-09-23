@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
 import 'package:sbb_oidc_example/auth/token_spec_provider.dart';
@@ -39,15 +36,17 @@ class _State extends State<HomePage> {
   }
 
   Widget _body() {
-    return Column(
-      children: [
-        _userInfo(),
-        _selector(),
-        Expanded(
-          child: _content(),
-        ),
-        _footer(),
-      ],
+    return SafeArea(
+      child: Column(
+        children: [
+          _userInfo(),
+          _selector(),
+          Expanded(
+            child: _content(),
+          ),
+          _footer(),
+        ],
+      ),
     );
   }
 
@@ -80,12 +79,8 @@ class _State extends State<HomePage> {
   }
 
   Widget _footer() {
-    var padding = const EdgeInsetsDirectional.fromSTEB(8, 16, 8, 16);
-    if (!kIsWeb && Platform.isIOS) {
-      padding = const EdgeInsetsDirectional.fromSTEB(8, 16, 8, 32);
-    }
     return Container(
-      padding: padding,
+      padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
       child: const Column(
         children: [
           EndSessionButton(),

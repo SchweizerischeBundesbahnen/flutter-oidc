@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ch.sbb.appbakery.oidc.example">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <queries>
 
         <intent>
@@ -47,6 +50,24 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
+        </activity>
+
+        <activity
+            android:name="com.microsoft.identity.client.BrowserTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="esqappdevauth"
+                    android:host="oauth"
+                    android:path="/callback" />
+                <data
+                    android:scheme="sbboidcexampleappint"
+                    android:host="appbakery.sbb.ch"
+                    android:path="/redirect/" />
+            </intent-filter>
         </activity>
 
         <meta-data 

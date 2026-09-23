@@ -92,7 +92,7 @@ class _State extends State<OidcTokenView> {
         onEnterSecondFactorPressed: (context) => enterSecondFactor(context),
       );
     }
-    if (error is NetworkException) {
+    if (error is NoNetworkException) {
       return _ErrorViews.networkError(
         context: context,
         exception: error,
@@ -132,11 +132,17 @@ class _State extends State<OidcTokenView> {
                 title: 'Access token',
                 jwt: JsonWebToken.decode(token.accessToken),
               ),
-              JsonWebTokenListTile(
-                title: 'ID token',
-                jwt: JsonWebToken.decode(token.idToken),
-                isLastElement: true,
-              ),
+              token.idToken != null
+                  ? JsonWebTokenListTile(
+                      title: 'ID token',
+                      jwt: JsonWebToken.decode(token.idToken!),
+                      isLastElement: true,
+                    )
+                  : SBBListItem(
+                      title: 'No ID token',
+                      onPressed: null,
+                      isLastElement: true,
+                    ),
             ],
           ),
         ),
@@ -203,7 +209,7 @@ class _ErrorViews {
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
               child: Text(
-                exception.cause.toString(),
+                exception.details.toString(),
                 style: SBBTextStyles.extraSmallLight,
               ),
             ),
@@ -223,7 +229,7 @@ class _ErrorViews {
 
   static Widget networkError({
     required BuildContext context,
-    required NetworkException exception,
+    required NoNetworkException exception,
     required Function(BuildContext context) onRetryPressed,
   }) {
     return SingleChildScrollView(
@@ -237,7 +243,7 @@ class _ErrorViews {
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
               child: Text(
-                exception.cause.toString(),
+                exception.details.toString(),
                 style: SBBTextStyles.extraSmallLight,
               ),
             ),

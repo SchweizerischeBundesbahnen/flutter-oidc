@@ -1,6 +1,7 @@
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
+import 'package:sbb_oidc/sbb_oidc.dart';
 import 'package:sbb_oidc_example/auth/authenticator.dart';
 import 'package:sbb_oidc_example/di.dart';
 import 'package:sbb_oidc_example/flavor.dart';
@@ -29,8 +30,8 @@ class _State extends State<LoginPage> {
 
   Widget _loading() {
     return Container(
-      alignment: AlignmentDirectional.center,
-      child: const CircularProgressIndicator(),
+      alignment: Alignment.center,
+      child: SBBLoadingIndicator.tiny(),
     );
   }
 
@@ -48,12 +49,16 @@ class _State extends State<LoginPage> {
   Widget _message(BuildContext context) {
     return Expanded(
       child: Container(
-        alignment: AlignmentDirectional.center,
-        padding: const EdgeInsetsDirectional.all(16),
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(16),
         child: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SBBLogo(color: SBBColors.red, width: 112, height: 56),
+            SBBLogo(
+              color: SBBColors.red,
+              width: 112,
+              height: 56,
+            ),
             SizedBox(height: 32),
             Text(
               'Login with your SBB account',
@@ -88,39 +93,31 @@ class _State extends State<LoginPage> {
 
   void _onLoginPressed() async {
     final authenticator = DI.get<Authenticator>();
-
-    setState(() {
-      isLoading = true;
-    });
-
+    setState(() => isLoading = true);
     try {
       await authenticator.login();
       if (mounted) {
         context.navigateToHomePage();
       }
+    } on LoginCanceledException catch (_) {
+      // ignore
     } catch (e) {
       Fimber.d('Login failed', ex: e);
       if (mounted) {
         SBBToast.of(context).show(title: 'Login failed.');
       }
     }
-
-    setState(() {
-      isLoading = false;
-    });
+    setState(() => isLoading = false);
   }
 }
 
-// Extensions
-
-extension _BuildContextExt on BuildContext {
+extension _BuildContextX on BuildContext {
   void navigateToHomePage() {
     final route = MaterialPageRoute(
       builder: (context) {
         return const HomePage();
       },
     );
-
     Navigator.pushReplacement(this, route);
   }
 }

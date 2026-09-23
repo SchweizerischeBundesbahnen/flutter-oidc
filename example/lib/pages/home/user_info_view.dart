@@ -6,7 +6,9 @@ import 'package:sbb_oidc_example/auth/token_spec_provider.dart';
 import 'package:sbb_oidc_example/di.dart';
 
 class UserInfoView extends StatelessWidget {
-  const UserInfoView({super.key});
+  const UserInfoView({
+    super.key,
+  });
 
   Authenticator get authenticator => DI.get<Authenticator>();
 
@@ -116,8 +118,6 @@ class UserInfoView extends StatelessWidget {
   }
 }
 
-//
-
 class _ViewModel {
   const _ViewModel(
     this.token,
@@ -141,6 +141,6 @@ class _ViewModel {
   }
 
   String get authorizationHeader {
-    return '${token.tokenType} ${token.accessToken}';
+    return token.authorizationHeader;
   }
 }

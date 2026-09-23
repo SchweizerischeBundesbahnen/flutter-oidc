@@ -56,10 +56,12 @@ extension _GetItX on GetIt {
       final flavor = get<Flavor>();
       final authenticatorConfig = flavor.authenticatorConfig;
       return SBBOpenIDConnect.createClient(
-        discoveryUrl: authenticatorConfig.discoveryUrl,
-        clientId: authenticatorConfig.clientId,
-        redirectUrl: authenticatorConfig.redirectUrl,
-        postLogoutRedirectUrl: authenticatorConfig.postLogoutRedirectUrl,
+        config: OidcClientConfig(
+          tenantId: SBBTenant.prod.id,
+          clientId: authenticatorConfig.clientId,
+          redirectUrl: authenticatorConfig.redirectUrl,
+          keychainAccessGroup: authenticatorConfig.keychainAccessGroup,
+        ),
       );
     }
 
