@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_json_view/flutter_json_view.dart';
 import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
 import 'package:sbb_oidc/sbb_oidc.dart';
-import 'package:sbb_oidc_example/auth/authenticator.dart';
-import 'package:sbb_oidc_example/di.dart';
 
 class JsonWebTokenPage extends StatelessWidget {
   const JsonWebTokenPage({
@@ -17,18 +15,18 @@ class JsonWebTokenPage extends StatelessWidget {
   final String title;
   final JsonWebToken jwt;
 
-  Authenticator get authenticator => DI.get();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
-      body: _body(context),
+      body: SafeArea(
+        child: _body(context),
+      ),
     );
   }
 
   SBBHeader _appBar() {
-    return SBBHeader(title: title);
+    return SBBHeader(titleText: title);
   }
 
   Widget _body(BuildContext context) {
@@ -36,7 +34,7 @@ class JsonWebTokenPage extends StatelessWidget {
       children: [
         const SBBListHeader('Header'),
         Container(
-          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
           child: JsonView.map(
             jwt.header,
             theme: const JsonViewTheme(
@@ -47,7 +45,7 @@ class JsonWebTokenPage extends StatelessWidget {
         const Divider(),
         const SBBListHeader('Payload'),
         Container(
-          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
           child: JsonView.map(
             jwt.payload,
             theme: const JsonViewTheme(
@@ -58,7 +56,7 @@ class JsonWebTokenPage extends StatelessWidget {
         const Divider(),
         const SBBListHeader('Signature'),
         Container(
-          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           child: Text(
             base64Url.encode(jwt.signature),
             style: const TextStyle(

@@ -30,7 +30,7 @@ dependencies:
   # https://pub.dev/packages/rxdart
   rxdart: ^0.28.0
   # https://pub.dev/packages/sbb_design_system_mobile
-  sbb_design_system_mobile: ^4.9.0
+  sbb_design_system_mobile: ^5.1.0
 
 dev_dependencies:
   flutter_test:

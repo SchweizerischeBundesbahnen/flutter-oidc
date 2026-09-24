@@ -45,12 +45,10 @@ class _State extends State<OidcTokenView> {
         if (snapshot.hasError) {
           return _error(context, snapshot.error);
         }
-
         final token = snapshot.data;
         if (token != null) {
           return _body(context, token);
         }
-
         return _loading(context);
       },
     );
@@ -59,22 +57,21 @@ class _State extends State<OidcTokenView> {
   Widget _loading(BuildContext context) {
     return FutureBuilder(
       future: Future.delayed(const Duration(milliseconds: 50), () => "GO"),
-      builder: (constext, snapshot) {
+      builder: (context, snapshot) {
         return AnimatedOpacity(
           opacity: snapshot.hasData ? 1 : 0,
           duration: const Duration(milliseconds: 200),
           child: Container(
             alignment: Alignment.center,
+            padding: EdgeInsets.all(32),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              spacing: 8,
               children: [
                 const SBBLoadingIndicator.tiny(),
-                Container(
-                  margin: const EdgeInsetsDirectional.only(top: 8, bottom: 24),
-                  child: const Text(
-                    'Loading OIDC token',
-                    style: SBBTextStyles.smallLight,
-                  ),
+                Text(
+                  'Loading OIDC token',
+                  style: Theme.of(context).sbbTextTheme.smallLight,
                 ),
               ],
             ),
@@ -85,179 +82,97 @@ class _State extends State<OidcTokenView> {
   }
 
   Widget _error(BuildContext context, dynamic error) {
-    if (error is MultiFactorAuthenticationException) {
-      return _ErrorViews.multiFactorAuthenticationError(
-        context: context,
-        exception: error,
-        onEnterSecondFactorPressed: (context) => enterSecondFactor(context),
-      );
-    }
-    if (error is NoNetworkException) {
-      return _ErrorViews.networkError(
-        context: context,
-        exception: error,
-        onRetryPressed: (context) => retryGetToken(context),
-      );
-    }
-
-    final textTheme = Theme.of(context).textTheme;
-    return SingleChildScrollView(
-      child: SBBContentBox(
-        margin: const EdgeInsetsDirectional.all(16),
-        padding: const EdgeInsetsDirectional.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('ERROR', style: textTheme.titleLarge),
-            if (error != null)
-              Container(
-                margin: const EdgeInsetsDirectional.only(top: 8),
-                child: Text(error.toString(), style: textTheme.bodySmall),
-              ),
-          ],
-        ),
-      ),
+    const messageStyle = SBBMessageStyle(
+      padding: EdgeInsets.all(32),
     );
+    if (error is MultiFactorAuthenticationException) {
+      return SBBMessage(
+        titleText: 'Multi-Factor authentication required.',
+        subtitleText: error.details.toString(),
+        action: SBBTertiaryButtonSmall(
+          labelText: 'Enter second factor',
+          onPressed: () => _enterSecondFactor(context),
+        ),
+        style: messageStyle,
+      );
+    } else if (error is NoNetworkException) {
+      return SBBMessage(
+        titleText: 'Network error',
+        subtitleText: error.details.toString(),
+        action: SBBTertiaryButtonSmall(
+          labelText: 'Retry',
+          onPressed: () => _retryGetToken(context),
+        ),
+        style: messageStyle,
+      );
+    } else {
+      return SBBMessage(
+        titleText: 'ERROR',
+        subtitleText: error.toString(),
+        style: messageStyle,
+      );
+    }
   }
 
   Widget _body(BuildContext context, OidcToken token) {
     return ListView(
       children: [
         SBBContentBox(
-          margin: const EdgeInsetsDirectional.fromSTEB(8, 16, 8, 16),
+          margin: const EdgeInsets.fromLTRB(8, 16, 8, 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              JsonWebTokenListTile(
-                title: 'Access token',
-                jwt: JsonWebToken.decode(token.accessToken),
-              ),
-              token.idToken != null
-                  ? JsonWebTokenListTile(
-                      title: 'ID token',
-                      jwt: JsonWebToken.decode(token.idToken!),
-                      isLastElement: true,
-                    )
-                  : SBBListItem(
-                      title: 'No ID token',
-                      onPressed: null,
-                      isLastElement: true,
-                    ),
-            ],
+            children: SBBDivider.divideItems(
+              context: context,
+              items: [
+                JsonWebTokenListTile(
+                  title: 'Access token',
+                  jwt: JsonWebToken.decode(token.accessToken),
+                ),
+                token.idToken != null
+                    ? JsonWebTokenListTile(
+                        title: 'ID token',
+                        jwt: JsonWebToken.decode(token.idToken!),
+                      )
+                    : SBBListItem(
+                        titleText: 'No ID token',
+                        onTap: null,
+                      ),
+              ],
+            ),
           ),
         ),
-        //
         Container(
           margin: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 16),
           alignment: AlignmentDirectional.centerEnd,
           child: SBBTertiaryButtonSmall(
-            label: 'Copy to clipboard',
-            onPressed: () => copyToClipboard(context, token),
+            labelText: 'Copy to clipboard',
+            onPressed: () => _copyToClipboard(context, token),
           ),
         ),
       ],
     );
   }
 
-  //
-
-  void retryGetToken(BuildContext context) {
+  void _retryGetToken(BuildContext context) {
     final authenticator = DI.get<Authenticator>();
     final tokenFuture = authenticator.token(widget.tokenId);
     setTokenFuture(tokenFuture);
   }
 
-  Future<void> enterSecondFactor(BuildContext context) async {
+  Future<void> _enterSecondFactor(BuildContext context) async {
     final authenticator = DI.get<Authenticator>();
     final tokenFuture = authenticator.login(tokenId: widget.tokenId);
     setTokenFuture(tokenFuture);
   }
 
-  Future<void> copyToClipboard(BuildContext context, OidcToken token) async {
+  Future<void> _copyToClipboard(BuildContext context, OidcToken token) async {
     final jsonString = token.toJsonString();
     final clipboardData = ClipboardData(text: jsonString);
     await Clipboard.setData(clipboardData);
     if (context.mounted) {
-      SBBToast.of(context).show(title: 'OIDC token copied to clipboard.');
+      SBBToast.of(context).show(
+        titleText: 'OIDC token copied to clipboard.',
+      );
     }
-  }
-}
-
-class _ErrorViews {
-  const _ErrorViews._();
-
-  static Widget multiFactorAuthenticationError({
-    required BuildContext context,
-    required MultiFactorAuthenticationException exception,
-    required Function(BuildContext context) onEnterSecondFactorPressed,
-  }) {
-    return SingleChildScrollView(
-      child: SBBContentBox(
-        margin: const EdgeInsetsDirectional.all(16),
-        padding: const EdgeInsetsDirectional.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('ERROR', style: SBBTextStyles.largeLight),
-            Container(
-              margin: const EdgeInsetsDirectional.only(top: 8),
-              child: const Text(
-                'Multi-Factor authentication required.',
-                style: SBBTextStyles.mediumLight,
-              ),
-            ),
-            Container(
-              margin: const EdgeInsetsDirectional.only(top: 8),
-              child: Text(
-                exception.details.toString(),
-                style: SBBTextStyles.extraSmallLight,
-              ),
-            ),
-            Container(
-              alignment: AlignmentDirectional.centerStart,
-              margin: const EdgeInsetsDirectional.fromSTEB(0, 16, 16, 0),
-              child: SBBTertiaryButtonSmall(
-                label: 'Enter second factor',
-                onPressed: () => onEnterSecondFactorPressed(context),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  static Widget networkError({
-    required BuildContext context,
-    required NoNetworkException exception,
-    required Function(BuildContext context) onRetryPressed,
-  }) {
-    return SingleChildScrollView(
-      child: SBBContentBox(
-        margin: const EdgeInsetsDirectional.all(16),
-        padding: const EdgeInsetsDirectional.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Network error', style: SBBTextStyles.largeLight),
-            Container(
-              margin: const EdgeInsetsDirectional.only(top: 8),
-              child: Text(
-                exception.details.toString(),
-                style: SBBTextStyles.extraSmallLight,
-              ),
-            ),
-            Container(
-              alignment: AlignmentDirectional.centerStart,
-              margin: const EdgeInsetsDirectional.fromSTEB(0, 16, 16, 0),
-              child: SBBTertiaryButtonSmall(
-                label: 'Retry',
-                onPressed: () => onRetryPressed(context),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

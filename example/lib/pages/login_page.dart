@@ -50,18 +50,18 @@ class _State extends State<LoginPage> {
       child: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(16),
-        child: const Column(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SBBLogo(
+            const SBBLogo(
               color: SBBColors.red,
               width: 112,
               height: 56,
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             Text(
               'Login with your SBB account',
-              style: SBBTextStyles.largeLight,
+              style: Theme.of(context).sbbTextTheme.largeLight,
             ),
           ],
         ),
@@ -72,19 +72,19 @@ class _State extends State<LoginPage> {
   Widget _flavor(BuildContext context) {
     final flavor = DI.get<Flavor>();
     return Container(
-      alignment: AlignmentDirectional.center,
+      alignment: Alignment.center,
       child: Text(
         'Flavor: ${flavor.displayName}',
-        style: SBBTextStyles.extraSmallLight,
+        style: Theme.of(context).sbbTextTheme.xxSmallLight,
       ),
     );
   }
 
   Widget _loginButton(BuildContext context) {
     return Container(
-      padding: const EdgeInsetsDirectional.all(16),
+      padding: const EdgeInsets.all(16),
       child: SBBPrimaryButton(
-        label: 'Login',
+        labelText: 'Login',
         onPressed: _onLoginPressed,
       ),
     );
@@ -103,7 +103,8 @@ class _State extends State<LoginPage> {
     } catch (e) {
       if (mounted) {
         SBBToast.of(context).show(
-          title: 'Login failed.',
+          titleText: 'Login failed.',
+          duration: SBBToast.durationLong,
         );
       }
     }

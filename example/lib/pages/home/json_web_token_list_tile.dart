@@ -8,12 +8,10 @@ class JsonWebTokenListTile extends StatelessWidget {
     super.key,
     required this.title,
     required this.jwt,
-    this.isLastElement = false,
   });
 
   final String title;
   final JsonWebToken jwt;
-  final bool isLastElement;
 
   String get expirationState {
     switch (jwt.isExpired) {
@@ -28,11 +26,10 @@ class JsonWebTokenListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SBBListItem(
-      title: title,
-      subtitle: expirationState,
-      isLastElement: isLastElement,
-      onPressed: () => onPressed(context),
-      trailingIcon: SBBIcons.chevron_right_medium,
+      titleText: title,
+      subtitleText: expirationState,
+      trailingIconData: SBBIcons.chevron_right_medium,
+      onTap: () => onPressed(context),
     );
   }
 
@@ -42,7 +39,6 @@ class JsonWebTokenListTile extends StatelessWidget {
         return JsonWebTokenPage(title: title, jwt: jwt);
       },
     );
-
     Navigator.push(context, route);
   }
 }

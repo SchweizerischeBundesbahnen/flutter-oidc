@@ -2,32 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
 import 'package:sbb_oidc_example/auth/authenticator.dart';
 import 'package:sbb_oidc_example/di.dart';
+import 'package:sbb_oidc_example/pages/home/end_session_confirmation_sheet.dart';
 import 'package:sbb_oidc_example/pages/login_page.dart';
 
 class EndSessionButton extends StatefulWidget {
   const EndSessionButton({super.key});
 
   @override
-  State<EndSessionButton> createState() => _EndSessionButtonState();
+  State<EndSessionButton> createState() => _State();
 }
 
-class _EndSessionButtonState extends State<EndSessionButton> {
+class _State extends State<EndSessionButton> {
   bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return SBBSecondaryButton(
-      label: 'End Session',
+      labelText: 'End Session',
       isLoading: isLoading,
       onPressed: () => onEndSessionPressed(context),
     );
   }
 
   Future<void> onEndSessionPressed(BuildContext context) async {
-    setState(() {
-      isLoading = true;
-    });
-
+    setState(() => isLoading = true);
     final confirmed = await confirmEndSession(context);
     if (confirmed) {
       final authenticator = DI.get<Authenticator>();
@@ -39,50 +37,22 @@ class _EndSessionButtonState extends State<EndSessionButton> {
       } catch (_) {
         if (context.mounted) {
           SBBToast.of(context).show(
-            title: 'End session failed.',
+            titleText: 'End session failed.',
+            duration: SBBToast.durationLong,
           );
         }
       }
     }
-
-    setState(() {
-      isLoading = false;
-    });
+    setState(() => isLoading = false);
   }
 
   Future<bool> confirmEndSession(BuildContext context) async {
-    final confirmed = await showSBBModalPopup<bool>(
-      context: context,
-      title: 'End Session',
-      child: Container(
-        margin: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'Confirm that you want to end the session. You will need to re-enter your login credentials if you want to use the app again at a later time.',
-            ),
-            Container(
-              alignment: AlignmentDirectional.centerEnd,
-              margin: const EdgeInsetsDirectional.only(top: 8),
-              child: SBBTertiaryButtonSmall(
-                label: 'OK',
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    final confirmed = await EndSessionConfirmationSheet.show(context);
     return confirmed ?? false;
   }
 }
 
-// Extensions
-
-extension _BuildContextExt on BuildContext {
+extension _BuildContextX on BuildContext {
   void navigateToLoginPage() {
     final route = MaterialPageRoute(
       builder: (context) {
