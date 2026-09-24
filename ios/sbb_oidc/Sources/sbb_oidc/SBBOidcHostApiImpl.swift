@@ -14,7 +14,7 @@ class SBBOidcHostApiImpl: NSObject, SBBOidcHostApi {
             let config = MSALPublicClientApplicationConfig(
                 clientId: parameters.clientId,
                 redirectUri: parameters.redirectUri,
-                authority: parameters.authority,
+                authority: try parameters.authority,
             )
             config.bypassRedirectURIValidation = true
             config.cacheConfig.keychainSharingGroup = parameters.keychainAccessGroup
@@ -40,12 +40,11 @@ class SBBOidcHostApiImpl: NSObject, SBBOidcHostApi {
             authPresentationViewController: viewController
         )
         let interactiveTokenParameters = MSALInteractiveTokenParameters(
-            scopes: parameters.scopes.removeReserved(),
+            scopes: parameters.scopes.removeReservedScopes(),
             webviewParameters: webviewParameters
         )
         interactiveTokenParameters.loginHint = parameters.loginHint
-        interactiveTokenParameters.promptType =
-            parameters.prompt?.toMSALPromptType() ?? .default
+        interactiveTokenParameters.promptType = parameters.prompt?.toMSALPromptType() ?? .default
         return try await withCheckedThrowingContinuation { continuation in
             pca.acquireToken(with: interactiveTokenParameters) {
                 result,
@@ -82,9 +81,7 @@ class SBBOidcHostApiImpl: NSObject, SBBOidcHostApi {
         }
     }
 
-    func getToken(parameters: GetTokenParameters) async throws
-        -> OidcTokenResponse
-    {
+    func getToken(parameters: GetTokenParameters) async throws -> OidcTokenResponse {
         let pca = try pcaOrThrow()
         guard let account = try currentAccount(pca) else {
             throw PigeonError(
@@ -94,7 +91,7 @@ class SBBOidcHostApiImpl: NSObject, SBBOidcHostApi {
             )
         }
         let silentTokenParameters = MSALSilentTokenParameters(
-            scopes: parameters.scopes.removeReserved(),
+            scopes: parameters.scopes.removeReservedScopes(),
             account: account
         )
         silentTokenParameters.forceRefresh = parameters.forceRefresh
@@ -199,9 +196,7 @@ class SBBOidcHostApiImpl: NSObject, SBBOidcHostApi {
         return pca
     }
 
-    private func currentAccount(_ pca: MSALPublicClientApplication) throws
-        -> MSALAccount?
-    {
+    private func currentAccount(_ pca: MSALPublicClientApplication) throws -> MSALAccount? {
         guard
             let currentAccountId = defaults.string(
                 forKey: Self.currentAccountIdKey
@@ -209,11 +204,7 @@ class SBBOidcHostApiImpl: NSObject, SBBOidcHostApi {
         else {
             return nil
         }
-        do {
-            return try pca.account(forIdentifier: currentAccountId)
-        } catch {
-            throw error.toPigeonError()
-        }
+        return try? pca.account(forIdentifier: currentAccountId)
     }
 
     private func currentViewController() -> UIViewController? {
@@ -225,9 +216,7 @@ class SBBOidcHostApiImpl: NSObject, SBBOidcHostApi {
         return topViewController(of: rootViewController)
     }
 
-    private func topViewController(of viewController: UIViewController?)
-        -> UIViewController?
-    {
+    private func topViewController(of viewController: UIViewController?) -> UIViewController? {
         switch viewController {
         case let navigationController as UINavigationController:
             return topViewController(
@@ -248,12 +237,13 @@ class SBBOidcHostApiImpl: NSObject, SBBOidcHostApi {
 // MARK: - Extensions
 
 extension InitializeParameters {
-    fileprivate let authority: MSALAADAuthority {
-        let url = URL(
-            string:
-                "https://login.microsoftonline.com/\(parameters.tenantId)"
-        )!
-        return MSALAADAuthority(url: url)
+    fileprivate var authority: MSALAADAuthority {
+        get throws {
+            let url = URL(
+                string: "https://login.microsoftonline.com/\(tenantId)"
+            )!
+            return try MSALAADAuthority(url: url)
+        }
     }
 }
 
@@ -284,29 +274,42 @@ extension NSError {
     fileprivate var isUserCancelled: Bool {
         domain == MSALErrorDomain && code == MSALError.userCanceled.rawValue
     }
+
+    fileprivate var errorCode: String {
+        guard
+            let oauthErrorCode = userInfo[MSALOAuthErrorKey] as? String,
+            !oauthErrorCode.isEmpty
+        else {
+            return "\(domain).\(code)"
+        }
+        guard
+            let oauthSubErrorCode = userInfo[MSALOAuthSubErrorKey] as? String,
+            !oauthSubErrorCode.isEmpty
+        else {
+            return oauthErrorCode
+        }
+        return "\(oauthErrorCode) :: \(oauthSubErrorCode)"
+    }
+
+    fileprivate var message: String {
+        return userInfo["MSALErrorDescriptionKey"] as? String
+            ?? localizedDescription
+    }
 }
 
 extension Error {
     fileprivate func toPigeonError(message: String? = nil) -> PigeonError {
-        let nsError = self as NSError
-        let subErrorCode = nsError.userInfo["MSALOAuthSubErrorKey"] as? String
-        let code: String =
-            if let subErrorCode, !subErrorCode.isEmpty {
-                "\(nsError.domain).\(nsError.code) :: \(subErrorCode)"
-            } else {
-                "\(nsError.domain).\(nsError.code)"
-            }
-        let underlyingMessage =
-            nsError.userInfo["MSALErrorDescriptionKey"] as? String
-            ?? nsError.localizedDescription
-        let fullMessage =
-            message.map { "\($0) :: \(underlyingMessage)" } ?? underlyingMessage
-        return PigeonError(code: code, message: fullMessage, details: nsError)
+        let e = self as NSError
+        return PigeonError(
+            code: e.errorCode,
+            message: message.map { "\($0) :: \(e.message)" } ?? e.message,
+            details: "\(e)",
+        )
     }
 }
 
 extension [String] {
-    fileprivate func removeReserved() -> [String] {
+    fileprivate func removeReservedScopes() -> [String] {
         let reservedScopes: Set<String> = [
             "openid",
             "profile",
