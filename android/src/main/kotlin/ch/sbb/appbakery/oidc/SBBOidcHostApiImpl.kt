@@ -238,6 +238,6 @@ private fun MsalException.toFlutterError(message: String? = null): FlutterError 
             false -> "$message :: ${this.message}"
             else -> this.message
         },
-        details = this,
+        details = toString(),
     )
 }
