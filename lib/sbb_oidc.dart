@@ -1,9 +1,11 @@
 library;
 
+import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:sbb_oidc/src/oidc_client.dart';
 import 'package:sbb_oidc/src/oidc_client_config.dart';
 import 'package:sbb_oidc/src/oidc_client_impl.dart';
+import 'package:sbb_oidc/src/platform_exception_x.dart';
 import 'package:sbb_oidc/src/sbb_oidc_api.g.dart';
 
 export 'package:sbb_oidc/src/json_web_token.dart';
@@ -23,12 +25,22 @@ class SBBOpenIDConnect {
     required OidcClientConfig config,
     bool enableLogging = false,
   }) async {
-    final client = OidcClientImpl(
-      config: config,
-      hostApi: SBBOidcHostApi(),
-      log: enableLogging ? Logger('SBB OIDC') : null,
-    );
-    await client.initialize();
-    return client;
+    final log = enableLogging ? Logger('SBB OIDC') : null;
+    try {
+      final client = OidcClientImpl(
+        config: config,
+        hostApi: SBBOidcHostApi(),
+        log: enableLogging ? Logger('SBB OIDC') : null,
+      );
+      await client.initialize();
+      return client;
+    } catch (e, s) {
+      log?.severe('Creating ODC client failed', e, s);
+      if (e is PlatformException) {
+        throw e.convert();
+      } else {
+        rethrow;
+      }
+    }
   }
 }
