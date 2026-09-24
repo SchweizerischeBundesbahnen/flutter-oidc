@@ -59,12 +59,21 @@ class OidcClientImpl implements OidcClient {
     bool forceRefresh = false,
   }) async {
     _log?.info('Get token ${scopes.join(", ")}');
-    final parameters = GetTokenParameters(
-      forceRefresh: forceRefresh,
-      scopes: scopes,
-    );
-    final response = await _hostApi.getToken(parameters);
-    return response.toOidcToken();
+    try {
+      final parameters = GetTokenParameters(
+        forceRefresh: forceRefresh,
+        scopes: scopes,
+      );
+      final response = await _hostApi.getToken(parameters);
+      return response.toOidcToken();
+    } catch (e, s) {
+      _log?.warning('Get token failed', e, s);
+      if (e is PlatformException) {
+        throw e.convert();
+      } else {
+        rethrow;
+      }
+    }
   }
 
   @override
@@ -94,7 +103,11 @@ class OidcClientImpl implements OidcClient {
       await _hostApi.logout();
     } catch (e, s) {
       _log?.warning('Logout failed', e, s);
-      rethrow;
+      if (e is PlatformException) {
+        throw e.convert();
+      } else {
+        rethrow;
+      }
     }
   }
 
@@ -105,7 +118,11 @@ class OidcClientImpl implements OidcClient {
       await _hostApi.endSession();
     } catch (e, s) {
       _log?.warning('End session failed', e, s);
-      rethrow;
+      if (e is PlatformException) {
+        throw e.convert();
+      } else {
+        rethrow;
+      }
     }
   }
 }
