@@ -36,7 +36,7 @@ class OidcClientConfig {
   /// The URL to which the server redirects after authentication.
   final String redirectUrl;
 
-  ///The iOS keychain access group used to cache tokens.
+  /// The iOS keychain access group used to cache tokens.
   ///
   /// Apps sharing the same group get silent SSO between them. Pass the app's bundle identifier
   /// to keep tokens private.

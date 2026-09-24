@@ -7,15 +7,14 @@ This app demonstrates how to use the `sbb_oidc` package.
 This app uses the [dotenv] package to load configuration at runtime from an `.env` file. Before you can run the example app create the `example_app.env` file in the `assets` dir and add the following content:
 
 ```
-DISCOVERY_URL=<The discovery url of your azure ad identity provider>
 CLIENT_ID=<The client id of your app>
-SCOPES=<The scopes that your app requires>
+KEYCHAIN_ACCESS_GROUP=<The iOS keychain access group used to cache tokens>
 REDIRECT_URL=<The redirect url of your mobile app>
+SCOPES=<The scopes that your app requires>
+TENANT_ID=<The unique tenant ID of your organisation.>
 ```
 
-Extend the intent filter for `RedirectUriReceiverActivity` in `AndroidManifest.xml` if needed.
-
-If you want to use other flavors you must create one `.env` file for each flavor. The content of the files may differ. Check the authenticator config factory functions defined in [flavor] to find out the exact content for each flavor.
+If you want to use other flavors you must create one `.env` file for each flavor. The content of the files may differ. Check the authenticator config factory functions defined in [flavor] to find out the exact content for each flavor. Additionally add the redirect URL to the intent filter for `BrowserTabActivity` in `AndroidManifest.xml` if needed.
 
 ## Run the app
 
