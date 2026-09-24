@@ -1,4 +1,3 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
 import 'package:sbb_oidc/sbb_oidc.dart';
@@ -102,9 +101,10 @@ class _State extends State<LoginPage> {
     } on LoginCanceledException catch (_) {
       // ignore
     } catch (e) {
-      Fimber.d('Login failed', ex: e);
       if (mounted) {
-        SBBToast.of(context).show(title: 'Login failed.');
+        SBBToast.of(context).show(
+          title: 'Login failed.',
+        );
       }
     }
     setState(() => isLoading = false);

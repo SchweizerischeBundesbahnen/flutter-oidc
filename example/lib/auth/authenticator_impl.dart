@@ -1,13 +1,18 @@
 import 'dart:async';
 
-import 'package:fimber/fimber.dart';
+import 'package:logging/logging.dart';
 import 'package:sbb_oidc/sbb_oidc.dart';
 import 'package:sbb_oidc_example/auth/authenticator.dart';
 import 'package:sbb_oidc_example/auth/token_spec.dart';
 import 'package:sbb_oidc_example/auth/token_spec_provider.dart';
 
+final _log = Logger('Authenticator');
+
 class AuthenticatorImpl implements Authenticator {
-  AuthenticatorImpl({required this.oidcClient, required this.tokenSpecs});
+  AuthenticatorImpl({
+    required this.oidcClient,
+    required this.tokenSpecs,
+  });
 
   final OidcClient oidcClient;
   final TokenSpecProvider tokenSpecs;
@@ -18,8 +23,8 @@ class AuthenticatorImpl implements Authenticator {
       final tokenSpec = tokenSpecs.first;
       await token(tokenSpec.id);
       return true;
-    } catch (e) {
-      Fimber.e('-->', ex: e);
+    } catch (e, s) {
+      _log.info('User is not authenticated', e, s);
       return false;
     }
   }

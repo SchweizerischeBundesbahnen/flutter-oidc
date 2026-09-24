@@ -1,4 +1,3 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
 import 'package:sbb_oidc_example/auth/authenticator.dart';
@@ -37,10 +36,11 @@ class _EndSessionButtonState extends State<EndSessionButton> {
         if (context.mounted) {
           context.navigateToLoginPage();
         }
-      } catch (e) {
-        Fimber.e('End session failed', ex: e);
+      } catch (_) {
         if (context.mounted) {
-          SBBToast.of(context).show(title: 'End session failed.');
+          SBBToast.of(context).show(
+            title: 'End session failed.',
+          );
         }
       }
     }
