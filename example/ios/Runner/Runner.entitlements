@@ -4,7 +4,7 @@
 <dict>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)ch.sbb.mf.estaMobileFlutterOidcExample</string>
+		<string>$(AppIdentifierPrefix)ch.sbb.appbakery.oidc.example</string>
 		<string>$(AppIdentifierPrefix)ch.sbb.sso.msal</string>
 	</array>
 </dict>
