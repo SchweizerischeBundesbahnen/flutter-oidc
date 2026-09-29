@@ -1,16 +1,18 @@
-import 'package:fimber/fimber.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 import 'package:sbb_oidc/sbb_oidc.dart';
 import 'package:sbb_oidc_example/auth/authenticator.dart';
 import 'package:sbb_oidc_example/auth/authenticator_impl.dart';
 import 'package:sbb_oidc_example/auth/token_spec_provider.dart';
 import 'package:sbb_oidc_example/flavor.dart';
 
+final _log = Logger('DI');
+
 class DI {
   const DI._();
 
-  static Future<void> init(Flavor flavor) {
-    Fimber.i('Initialize dependency injection');
+  static Future<void> initialize(Flavor flavor) {
+    _log.info('Initialize dependency injection');
     return GetIt.I.init(flavor);
   }
 
@@ -56,10 +58,13 @@ extension _GetItX on GetIt {
       final flavor = get<Flavor>();
       final authenticatorConfig = flavor.authenticatorConfig;
       return SBBOpenIDConnect.createClient(
-        discoveryUrl: authenticatorConfig.discoveryUrl,
-        clientId: authenticatorConfig.clientId,
-        redirectUrl: authenticatorConfig.redirectUrl,
-        postLogoutRedirectUrl: authenticatorConfig.postLogoutRedirectUrl,
+        config: OidcClientConfig(
+          tenantId: authenticatorConfig.tenantId,
+          clientId: authenticatorConfig.clientId,
+          redirectUrl: authenticatorConfig.redirectUrl,
+          keychainAccessGroup: authenticatorConfig.keychainAccessGroup,
+        ),
+        enableLogging: true,
       );
     }
 

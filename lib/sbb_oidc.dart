@@ -1,67 +1,46 @@
 library;
 
-import 'package:http/http.dart';
-import 'package:sbb_oidc/src/appauth/app_auth_oidc_client.dart';
+import 'package:flutter/services.dart';
+import 'package:logging/logging.dart';
 import 'package:sbb_oidc/src/oidc_client.dart';
-import 'package:sbb_oidc/src/oidc_discovery.dart';
-import 'package:sbb_oidc/src/token_accessibility.dart';
-import 'package:sbb_oidc/src/token_store.dart';
+import 'package:sbb_oidc/src/oidc_client_config.dart';
+import 'package:sbb_oidc/src/oidc_client_impl.dart';
+import 'package:sbb_oidc/src/platform_exception_x.dart';
+import 'package:sbb_oidc/src/sbb_oidc_api.g.dart';
 
-export 'package:sbb_oidc/src/exceptions/login_canceled_exception.dart';
-export 'package:sbb_oidc/src/exceptions/multi_factor_authentication_exception.dart';
-export 'package:sbb_oidc/src/exceptions/network_exception.dart';
-export 'package:sbb_oidc/src/exceptions/oidc_exception.dart';
-export 'package:sbb_oidc/src/exceptions/refresh_token_expired_exception.dart';
 export 'package:sbb_oidc/src/json_web_token.dart';
 export 'package:sbb_oidc/src/login_prompt.dart';
 export 'package:sbb_oidc/src/oidc_client.dart';
+export 'package:sbb_oidc/src/oidc_client_config.dart';
+export 'package:sbb_oidc/src/oidc_exception.dart';
 export 'package:sbb_oidc/src/oidc_token.dart';
-export 'package:sbb_oidc/src/openid_provider_metadata.dart';
-export 'package:sbb_oidc/src/sbb_discovery_url.dart';
-export 'package:sbb_oidc/src/token_accessibility.dart';
+export 'package:sbb_oidc/src/sbb_tenant.dart';
 export 'package:sbb_oidc/src/user_info.dart';
 
 class SBBOpenIDConnect {
   const SBBOpenIDConnect._();
 
-  /// Creates an OIDC client.
-  ///
-  /// Parameters:
-  /// - [discoveryUrl]: The OpenID Connect discovery endpoint URL
-  /// - [clientId]: The registered client identifier
-  /// - [redirectUrl]: The URL where the server redirects after authentication
-  /// - [postLogoutRedirectUrl]: Optional URL for redirect after logout
-  /// - [httpClient]: Optional custom HTTP client for requests
-  /// - [tokenAccessibility]: Optional accessibility level of tokens
-  /// - [installationId]: Optional installation ID of the app
-  ///
-  /// Returns a configured [OidcClient] ready for authentication operations.
+  /// Creates and configures an OIDC client ready for authentication operations.
   static Future<OidcClient> createClient({
-    required String discoveryUrl,
-    required String clientId,
-    required String redirectUrl,
-    String? postLogoutRedirectUrl,
-    Client? httpClient,
-    TokenAccessibility? tokenAccessibility,
-    String? installationId,
+    required OidcClientConfig config,
+    bool enableLogging = false,
   }) async {
-    // Get the OpenID Connect provider configuration from the discovery
-    // endpoint.
-    final providerConfiguration = await OidcDiscovery.getProviderConfiguration(
-      httpClient: httpClient ?? Client(),
-      discoveryUrl: discoveryUrl,
-    );
-    // Create and return the OIDC client.
-    return AppAuthOidcClient(
-      clientId: clientId,
-      httpClient: httpClient ?? Client(),
-      postLogoutRedirectUrl: postLogoutRedirectUrl,
-      providerConfiguration: providerConfiguration,
-      redirectUrl: redirectUrl,
-      tokenStore: TokenStore(
-        accessibility: tokenAccessibility ?? TokenAccessibility.whenUnlocked,
-      ),
-      installationId: installationId ?? '',
-    );
+    final log = enableLogging ? Logger('SBB OIDC') : null;
+    try {
+      final client = OidcClientImpl(
+        config: config,
+        hostApi: SBBOidcHostApi(),
+        log: enableLogging ? Logger('SBB OIDC') : null,
+      );
+      await client.initialize();
+      return client;
+    } catch (e, s) {
+      log?.severe('Creating ODC client failed', e, s);
+      if (e is PlatformException) {
+        throw e.convert();
+      } else {
+        rethrow;
+      }
+    }
   }
 }

@@ -1,6 +1,6 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
+import 'package:sbb_oidc/sbb_oidc.dart';
 import 'package:sbb_oidc_example/auth/authenticator.dart';
 import 'package:sbb_oidc_example/di.dart';
 import 'package:sbb_oidc_example/flavor.dart';
@@ -29,8 +29,8 @@ class _State extends State<LoginPage> {
 
   Widget _loading() {
     return Container(
-      alignment: AlignmentDirectional.center,
-      child: const CircularProgressIndicator(),
+      alignment: Alignment.center,
+      child: SBBLoadingIndicator.tiny(),
     );
   }
 
@@ -48,16 +48,20 @@ class _State extends State<LoginPage> {
   Widget _message(BuildContext context) {
     return Expanded(
       child: Container(
-        alignment: AlignmentDirectional.center,
-        padding: const EdgeInsetsDirectional.all(16),
-        child: const Column(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(16),
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SBBLogo(color: SBBColors.red, width: 112, height: 56),
-            SizedBox(height: 32),
+            const SBBLogo(
+              color: SBBColors.red,
+              width: 112,
+              height: 56,
+            ),
+            const SizedBox(height: 32),
             Text(
               'Login with your SBB account',
-              style: SBBTextStyles.largeLight,
+              style: Theme.of(context).sbbTextTheme.largeLight,
             ),
           ],
         ),
@@ -68,19 +72,19 @@ class _State extends State<LoginPage> {
   Widget _flavor(BuildContext context) {
     final flavor = DI.get<Flavor>();
     return Container(
-      alignment: AlignmentDirectional.center,
+      alignment: Alignment.center,
       child: Text(
         'Flavor: ${flavor.displayName}',
-        style: SBBTextStyles.extraSmallLight,
+        style: Theme.of(context).sbbTextTheme.xxSmallLight,
       ),
     );
   }
 
   Widget _loginButton(BuildContext context) {
     return Container(
-      padding: const EdgeInsetsDirectional.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: SBBPrimaryButton(
-        label: 'Login',
+        labelText: 'Login',
         onPressed: _onLoginPressed,
       ),
     );
@@ -88,39 +92,33 @@ class _State extends State<LoginPage> {
 
   void _onLoginPressed() async {
     final authenticator = DI.get<Authenticator>();
-
-    setState(() {
-      isLoading = true;
-    });
-
+    setState(() => isLoading = true);
     try {
       await authenticator.login();
       if (mounted) {
         context.navigateToHomePage();
       }
+    } on LoginCanceledException catch (_) {
+      // ignore
     } catch (e) {
-      Fimber.d('Login failed', ex: e);
       if (mounted) {
-        SBBToast.of(context).show(title: 'Login failed.');
+        SBBToast.of(context).show(
+          titleText: 'Login failed.',
+          duration: SBBToast.durationLong,
+        );
       }
     }
-
-    setState(() {
-      isLoading = false;
-    });
+    setState(() => isLoading = false);
   }
 }
 
-// Extensions
-
-extension _BuildContextExt on BuildContext {
+extension _BuildContextX on BuildContext {
   void navigateToHomePage() {
     final route = MaterialPageRoute(
       builder: (context) {
         return const HomePage();
       },
     );
-
     Navigator.pushReplacement(this, route);
   }
 }

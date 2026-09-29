@@ -11,7 +11,6 @@ A Flutter package for OpenID Connect (OIDC).
 - [Usage](#usage)
   * [Add dependency](#add-dependency)
   * [Create OIDC client](#create-oidc-client)
-    + [SBB discovery URLs](#sbb-discovery-urls)
   * [Login](#login)
   * [Get tokens](#get-tokens)
   * [Get data about the end-user](#get-data-about-the-end-user)
@@ -35,16 +34,25 @@ A Flutter package for OpenID Connect (OIDC).
 <a name="preconditions"></a>
 ## Preconditions
 
-Authentication with OIDC requires the app to be registered with an Identity Provider. SBB uses Azure AD for enterprise applications. You can manage your app registration using the [self-service API][1] or the [SBB API Platform][4]. Detailed documentation is available on this [Site][2].
+Authentication with OIDC requires the app to be registered with an identity provider. SBB uses Microsoft Entra ID for enterprise applications. You can manage your app registration using the [self-service API][1] or the [SBB API Platform][2]. Detailed documentation is available on this [site][3].
 
 <a name="redirect-url"></a>
 ### Redirect URL
 
-The redirect URL must contain a scheme, host and path component in the format **scheme://host/path** and be written in lowercase.
+The redirect URL must contain scheme, host, and path components in the format **scheme://host/path** and be written in lowercase.
 
 `Example: myappname://myhost/redirect`
 
-The iOS SDK has some logic to validate the redirect URL to see if it should be responsible for processing the redirect. This appears to be failing under certain circumstances. Adding a trailing slash to the redirect URL specified in your code fixes the issue.
+#### MSAL redirect URL
+
+Applications should use the Microsoft Entra ID-specific redirect URL format whenever possible:
+
+- **Android:** `msauth://<PACKAGE_NAME>/<BASE64_URL_ENCODED_SIGNATURE>`
+- **iOS:** `msauth.<BUNDLE_ID>://auth`
+
+See the Microsoft documentation for [Android][4] and [iOS][5].
+
+> **⚠️ This plugin does not enforce the format for backward compatibility.**
 
 <a name="setup"></a>
 ## Setup
@@ -52,7 +60,9 @@ The iOS SDK has some logic to validate the redirect URL to see if it should be r
 <a name="android"></a>
 ### Android
 
-Go to the [build.gradle][10] file for your Android app to specify the custom scheme. There should be a section in it that looks similar to the following but replace `<your_custom_scheme>` with the desired value. Ensure that the value of `<your_custom_scheme>` is all in lowercase.
+> **Minimum SDK version: 24**
+
+Open the [build.gradle.kts][6] file of your app and set the minimum SDK version to 24 or above:
 
 ``` groovy
 ...
@@ -60,89 +70,42 @@ android {
     ...
     defaultConfig {
         ...
-        manifestPlaceholders += [
-                'appAuthRedirectScheme': '<your_custom_scheme>'
-        ]
-    }
-}
-```
-
-Also set the minSdkVersion to 21 or above.
-
-``` groovy
-...
-android {
-    ...
-    defaultConfig {
-        ...
-        minSdkVersion 21
+        minSdk = 24
         ...
     }
 }
 ```
 
-<a name="android-backup"></a>
-#### Android Backup
+Add `BrowserTabActivity` to the [AndroidManifest.xml][7] of your app as a child of the `<application>` element. It handles the browser callback after authentication. The `scheme`, `host`, and `path` values must match the redirect URL registered with Microsoft Entra ID:
 
-Samsung devices with Android 9.0 or newer may experience crashes related to backups because the devices restore shared preferences. Because of this, the shared preferences must be excluded from the backup. There are two options:
-
-##### 1. Disable backup completely.
-
-Go to the [Manifest.xml][11] file for your Android app and add the `android:allowBackup` attribute to the `<application>` element.
-
-``` xml
-...
-<application
-    ...
-        android:allowBackup="false">
+```xml
+<activity
+    android:name="com.microsoft.identity.client.BrowserTabActivity"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="<scheme>"
+            android:host="<host>"
+            android:path="/<path>" />
+    </intent-filter>
+</activity>
 ```
 
-##### 2. Keep backup enabled but exclude the shared preferences used by this plugin.
+You also need to request the following permissions:
 
-Go to the [Manifest.xml][11] file for your Android app and add the `android:allowBackup` and the `android:fullBackupContent` attributes to the `<application>` element.
-
-``` xml
-...
-<application
-    ...
-        android:allowBackup="true" 
-        android:fullBackupContent="@xml/backup_rules">
-```
-
-Create or edit [backup_rules.xml][16] and exclude the shared preferences used by this plugin.
-
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
-<full-backup-content>
-    <exclude domain="sharedpref" path="FlutterSecureStorage"/>
-</full-backup-content>
-```
-
-If your app targets Android 12 (API level 31) or higher you must specify an additional set of XML backup rules. Go to the [Manifest.xml][11] file for your Android app and add the `android:dataExtractionRules` attribute to the `<application>` element. This attribute points to an XML file that contains backup rules.
-
-``` xml
-...
-<application
-    ...
-        android:dataExtractionRules="@xml/data_extraction_rules">
-```
-
-Create or edit [data_extraction_rules.xml][17] and exclude the shared preferences used by this plugin.
-
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
-<data-extraction-rules>
-    <cloud-backup>
-        <include domain="sharedpref" path="."/>
-        <exclude domain="sharedpref" path="FlutterSecureStorage"/>
-    </cloud-backup>
-</data-extraction-rules>
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 ```
 
 <a name="ios"></a>
 ### iOS
 
-Go to the [Info.plist][12] for your iOS app to specify the custom scheme. There should be a section in it that looks similar to the following but replace `<your_custom_scheme>` with the desired value.
+> **Minimum iOS deployment target: 17.0**
+
+Open the [Info.plist][8] of your iOS app to specify the custom scheme. It should contain a section similar to the following, with `<scheme>` replaced by the desired value.
 
 ```xml
 <key>CFBundleURLTypes</key>
@@ -152,11 +115,23 @@ Go to the [Info.plist][12] for your iOS app to specify the custom scheme. There 
         <string>Editor</string>
         <key>CFBundleURLSchemes</key>
         <array>
-            <string><your_custom_scheme></string>
+            <string><scheme></string>
         </array>
     </dict>
 </array>
 ```
+
+Also add `LSApplicationQueriesSchemes` to enable integration with the Microsoft Authenticator app if installed:
+
+```xml
+<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>msauthv2</string>
+  <string>msauthv3</string>
+</array>
+```
+
+Finally, add your desired keychain access group to the app's [keychain access groups entitlement][9]. See [Create OIDC client](#create-oidc-client) for more details.
 
 <a name="usage"></a>
 ## Usage
@@ -164,10 +139,10 @@ Go to the [Info.plist][12] for your iOS app to specify the custom scheme. There 
 <a name="add-dependency"></a>
 ### Add dependency
 
-Add `sbb_oidc` as a dependency in your [pubspec.yaml][14] file.
+Add `sbb_oidc` as a dependency in your [pubspec.yaml][10] file.
 
 ```yaml
-sbb_oidc: ^4.5.0
+sbb_oidc: ^5.0.0
 ```
 
 <a name="create-oidc-client"></a>
@@ -177,28 +152,26 @@ Create an instance of the OIDC client.
 
 ```dart
 final client = SBBOpenIDConnect.createClient(
-  discoveryUrl: <discovery_url>,
-  clientId: <client_id>,
-  redirectUrl: <redirect_url>,
+  config: OidcClientConfig(
+    tenantId: <tenant_id>,
+    clientId: <client_id>,
+    redirectUrl: <redirect_url>,
+    keychainAccessGroup: <keychain_access_group>,
+  ),
+  enableLogging: <true/false>,
 );
 ```
 
-Here the `<client_id>` and `<redirect_url>` should be replaced by the values registered with your identity provider. The `<discovery_url>` is the URL of the discovery endpoint exposed by your identity provider. The endpoint will return a document containing information about the OAuth 2.0 endpoints among other things.
+Here, replace `<client_id>` and `<redirect_url>` with the values registered with your identity provider.
 
-<a name="sbb-discovery-urls"></a>
-#### SBB discovery URLs
+`<tenant_id>` is the unique Microsoft tenant ID of your organisation. The SBB tenant IDs are defined in [sbb_tenant.dart][11]. We recommend using these constants. To implement multi-tenant login, you must use `common` as the tenant ID.
 
-The SBB discovery URLs are defined in [sbb_discovery_url.dart][20]. It is recommended to use these constants.
-
-| Environment | Discovery URL |
-| ----------- | ------------- |
-| DEV         | https://login.microsoftonline.com/93ead5cf-4825-45f3-9bc3-813cf64441af/v2.0/.well-known/openid-configuration |
-| PROD        | https://login.microsoftonline.com/2cda5d11-f0ac-46b3-967d-af1b2e1bd01a/v2.0/.well-known/openid-configuration |
+`<keychain_access_group>` is used to cache tokens in iOS. Apps that share the same group get silent SSO between them. Use the app's bundle identifier to keep tokens private. The value must also be declared in the app's [keychain access groups entitlement][9]. For more information, see [Sharing access to keychain items among a collection of apps][12].
 
 <a name="login"></a>
 ### Login
 
-To Authorize and authenticate end-users call the `login()` method. This will perform an authorization request and automatically exchange the authorization code. Upon completing the request successfully, the method should return an [OIDC token][30] that contains an access token which you can use to access protected APIs.
+To authorize and authenticate end users, call the `login()` method. This performs an interactive authorization request. Upon successfully completing the request, the method should return an [OIDC token][13] that contains an access token you can use to access protected APIs.
 
 ```dart
 final token = await client.login(
@@ -209,7 +182,7 @@ final token = await client.login(
 <a name="get-tokens"></a>
 ### Get tokens
 
-Access tokens are short-lived and must be refreshed as soon as they expire. Therefore you app should not cache the token. Instead the app should request the token every time it needs it by calling `getToken()`.
+Access tokens are short-lived and must be refreshed as soon as they expire. Therefore, your app should not cache the token. Instead, request a token every time it is needed by calling `getToken()`.
 
 ```dart
 final token = await client.getToken(
@@ -218,12 +191,12 @@ final token = await client.getToken(
 );
 ```
 
-The OIDC client checks if the token is expired and refreshes it automatically. You can also force a refresh by settings the `forceRefresh` argument to `true`.
+The OIDC client checks whether the token has expired and refreshes it automatically. You can also force a refresh by setting the `forceRefresh` argument to `true`.
 
 <a name="get-data-about-the-end-user"></a>
 ### Get data about the end-user
 
-To get data about the signed in end-user you can either use the [ID token][30] or call `getUserInfo()`. 
+To get data about the signed-in end user, you can either use the [ID token][13] or call `getUserInfo()`.
 
 ```dart
 final userInfo = await client.getUserInfo(
@@ -231,12 +204,12 @@ final userInfo = await client.getUserInfo(
 );
 ```
 
-Using `getUserInfo()` is **not recommendet** because in requires multiple HTTP requests to get the data. The ID token contains the same data and requires at most one request if the token must be refreshed.
+Using `getUserInfo()` is **not recommended** because it requires multiple HTTP requests to retrieve the data. The ID token contains the same data and requires at most one request if the token must be refreshed.
 
 <a name="get-the-sbb-uid"></a>
 #### Get the SBB uid
 
-The SBB uid  (u/e Number) is specified in the ID token as `sbbuid` claim. 
+The SBB UID (u/e number) is specified in the ID token as the `sbbuid` claim.
 
 ```dart
 final oidcToken = ....
@@ -247,35 +220,33 @@ final uid = idToken.payload['sbbuid'] as String;
 <a name="logout"></a>
 ### Logout
 
-Logout deletes all OIDC Tokens from the local cache. The user's session will remain active on the server and the user can be signed back in without providing credentials again.
+Logging out deletes all OIDC tokens from the local cache. The user's session remains active on the server, so the user can sign in again without providing credentials.
 
 ```dart
-await client.logout()
+await client.logout();
 ```
 
 <a name="end-session"></a>
 ### End session
 
-> **❌ End session does not work properly on mobile devices.**
-
-End session is used for logging out of the built-in browser and deleting all cached OIDC tokens.
+Ending the session logs the user out of the built-in browser and deletes all cached OIDC tokens. The user must provide their credentials to log in again after ending the session.
 
 ```dart
-await client.endSession()
+await client.endSession();
 ```
 
 <a name="access-multiple-apis"></a>
 ### Access multiple APIs
 
-AzureAD has a security limitation: an access token can only be used for one API. The access token can have multiple scopes for one API, but it cannot contain scope(s) of other APIs. In order to use multiple APIs, you must request additional tokens with the scope(s) of the corrensponding API. This means that the OIDC client will have one access token for each API.
+Azure AD has a security limitation: an access token can only be used for one API. An access token can have multiple scopes for one API, but it cannot contain scopes for other APIs. To use multiple APIs, you must request additional tokens with the scopes for the corresponding APIs. This means that the OIDC client has one access token for each API.
 
-Let's assume that your app neds access to three different APIs:
+Suppose your app needs access to three different APIs:
 
-1. Microsoft Graph with read acceess to User and Calendar
+1. Microsoft Graph with read access to User and Calendar
 2. Api 1
 3. Api 2
 
-The first step is to login. As mentioned above you can only use the scopes of one API, in this case Microsoft Graph. The scopes for this API are:
+The first step is to log in. As mentioned above, you can use the scopes of only one API, in this case Microsoft Graph. The scopes for this API are:
 
 ```
 openid, profile, email, offline_access, Calendars.Read, User.Read,
@@ -294,9 +265,9 @@ final token = await client.login(
 );
 ```
 
-The returned token can only be used to access the MIcrosoft Graph API. To access other APIs (Api 1 and Api 2) you must request one additional token for each API by using the `getToken()` method.
+The returned token can only be used to access the Microsoft Graph API. To access the other APIs (API 1 and API 2), you must request one additional token for each API using the `getToken()` method.
 
-The scopes for Api 1 are:
+The scopes for API 1 are:
 
 ```
 openid, offline_access, api://aaaaaaaa-1111-2222-3333-444444444444/.default,
@@ -312,7 +283,7 @@ final tokenForApi1 = await client.getToken(
 );
 ```
 
-The scopes for Api 2 are:
+The scopes for API 2 are:
 
 ```
 openid, offline_access, api://bbbbbbbb-1111-2222-3333-444444444444/.default,
@@ -331,7 +302,7 @@ final tokenForApi2 = await client.getToken(
 <a name="multi-factor-authentication"></a>
 #### Multi-Factor authentication
 
-Some APIS require Multi-Factor authentication (MFA) while others don't. In the example above the Microsoft Graph API does not require MFA but Api 1 and Api 2 do. Therefore `getToken()` will throw a [MultiFactorAuthenticationException][31]. In this case you must call `login()` a second time and use the scopes of an API that requires MFA.
+Some APIs require multi-factor authentication (MFA), while others do not. In the example above, the Microsoft Graph API does not require MFA, but API 1 and API 2 do. Therefore, `getToken()` will throw a `MultiFactorAuthenticationException`. In this case, you must call `login()` a second time and use the scopes of an API that requires MFA.
 
 ```dart
 final tokenForApi1 = await client.login(
@@ -343,26 +314,25 @@ final tokenForApi1 = await client.login(
 );
 ```
 
-This will open a popup where the user can enter the second factor.
+This opens a pop-up where the user can enter the second factor.
 
 <a name="example"></a>
 ## Example
 
-See [example app][15].
+See [example app][14].
 
 
 [1]: https://azure-ad.api.sbb.ch/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
-[2]: https://confluence.sbb.ch/display/IAM/Azure+AD+API%3A+Self-Service+API+for+App+Registrations+with+Entra+ID
-[3]: https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/cdn-usage.md
-[4]: https://developer.sbb.ch/home
-[10]: example/android/app/build.gradle
-[11]: example/android/app/src/main/AndroidManifest.xml
-[12]: example/ios/Runner/Info.plist
-[13]: example/web/index.html
-[14]: example/pubspec.yaml
-[15]: example
-[16]: example/android/app/src/main/res/xml/backup_rules.xml
-[17]: example/android/app/src/main/res/xml/data_extraction_rules.xml
-[20]: sbb_oidc/lib/src/sbb_discovery_url.dart
-[30]: sbb_oidc/lib/src/oidc_token.dart
-[31]: sbb_oidc/lib/src/exceptions/multi_factor_authentication_exception.dart
+[2]: https://developer.sbb.ch/home
+[3]: https://confluence.sbb.ch/display/IAM/Azure+AD+API%3A+Self-Service+API+for+App+Registrations+with+Entra+ID
+[4]: https://learn.microsoft.com/en-us/entra/msal/android/single-sign-on#generate-a-redirect-uri-for-a-broker
+[5]: https://learn.microsoft.com/en-us/entra/msal/objc/redirect-uris-ios
+[6]: example/android/app/build.gradle.kts
+[7]: example/android/app/src/main/AndroidManifest.xml
+[8]: example/ios/Runner/Info.plist
+[9]: example/ios/Runner/Runner.entitlements
+[10]: example/pubspec.yaml
+[11]: lib/src/sbb_tenant.dart
+[12]: https://developer.apple.com/documentation/security/sharing-access-to-keychain-items-among-a-collection-of-apps?language=objc
+[13]: lib/src/oidc_token.dart
+[14]: example

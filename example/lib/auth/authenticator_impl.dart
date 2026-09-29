@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:logging/logging.dart';
 import 'package:sbb_oidc/sbb_oidc.dart';
 import 'package:sbb_oidc_example/auth/authenticator.dart';
 import 'package:sbb_oidc_example/auth/token_spec.dart';
 import 'package:sbb_oidc_example/auth/token_spec_provider.dart';
+
+final _log = Logger('Authenticator');
 
 class AuthenticatorImpl implements Authenticator {
   AuthenticatorImpl({
@@ -20,7 +23,8 @@ class AuthenticatorImpl implements Authenticator {
       final tokenSpec = tokenSpecs.first;
       await token(tokenSpec.id);
       return true;
-    } catch (e) {
+    } catch (e, s) {
+      _log.info('User is not authenticated', e, s);
       return false;
     }
   }

@@ -1,4 +1,3 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
 import 'package:sbb_oidc_example/auth/authenticator.dart';
@@ -18,17 +17,14 @@ class _LogoutButtonState extends State<LogoutButton> {
   @override
   Widget build(BuildContext context) {
     return SBBPrimaryButton(
-      label: 'Logout',
+      labelText: 'Logout',
       isLoading: isLoading,
       onPressed: () => onPressed(context),
     );
   }
 
   Future<void> onPressed(BuildContext context) async {
-    setState(() {
-      isLoading = true;
-    });
-
+    setState(() => isLoading = true);
     final authenticator = DI.get<Authenticator>();
     try {
       await authenticator.logout();
@@ -36,21 +32,18 @@ class _LogoutButtonState extends State<LogoutButton> {
         context.navigateToLoginPage();
       }
     } catch (e) {
-      Fimber.e('Logout failed', ex: e);
       if (context.mounted) {
-        SBBToast.of(context).show(title: 'Logout failed.');
+        SBBToast.of(context).show(
+          titleText: 'Logout failed.',
+          duration: SBBToast.durationLong,
+        );
       }
     }
-
-    setState(() {
-      isLoading = false;
-    });
+    setState(() => isLoading = false);
   }
 }
 
-// Extensions
-
-extension _BuildContextExt on BuildContext {
+extension _BuildContextX on BuildContext {
   void navigateToLoginPage() {
     final route = MaterialPageRoute(
       builder: (context) {

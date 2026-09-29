@@ -6,7 +6,9 @@ import 'package:sbb_oidc_example/auth/token_spec_provider.dart';
 import 'package:sbb_oidc_example/di.dart';
 
 class UserInfoView extends StatelessWidget {
-  const UserInfoView({super.key});
+  const UserInfoView({
+    super.key,
+  });
 
   Authenticator get authenticator => DI.get<Authenticator>();
 
@@ -16,7 +18,6 @@ class UserInfoView extends StatelessWidget {
       future: _ViewModel.future(),
       builder: (context, snapshot) {
         late final Widget child;
-
         if (snapshot.hasError) {
           child = _error(context, snapshot.error);
         } else if (snapshot.hasData) {
@@ -24,22 +25,11 @@ class UserInfoView extends StatelessWidget {
         } else {
           child = _loading(context);
         }
-
-        return Stack(
-          children: [
-            Container(
-              color: SBBColors.red,
-              height: 39,
-            ),
-            SBBContentBox(
-              margin: const EdgeInsetsDirectional.symmetric(horizontal: 8),
-              padding: const EdgeInsetsDirectional.all(16),
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: child,
-              ),
-            ),
-          ],
+        return SBBHeaderBox(
+          body: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: child,
+          ),
         );
       },
     );
@@ -67,24 +57,23 @@ class UserInfoView extends StatelessWidget {
   }
 
   Widget _content(BuildContext context, _ViewModel vm) {
+    final textTheme = Theme.of(context).sbbTextTheme;
     return Row(
+      spacing: 16,
       children: [
-        Container(
-          margin: const EdgeInsetsDirectional.only(end: 16),
-          child: _picture(context, vm),
-        ),
+        _picture(context, vm),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 2,
             children: [
               Text(
                 vm.userInfo.name ?? '-',
-                style: SBBTextStyles.mediumLight,
+                style: textTheme.mediumLight,
               ),
-              const SizedBox(height: 2),
               Text(
                 vm.userInfo.email ?? '-',
-                style: SBBTextStyles.smallLight,
+                style: textTheme.smallLight,
               ),
             ],
           ),
@@ -116,8 +105,6 @@ class UserInfoView extends StatelessWidget {
   }
 }
 
-//
-
 class _ViewModel {
   const _ViewModel(
     this.token,
@@ -127,6 +114,14 @@ class _ViewModel {
   final OidcToken token;
   final UserInfo userInfo;
 
+  bool get hasPicture {
+    return userInfo.picture != null;
+  }
+
+  String get authorizationHeader {
+    return token.authorizationHeader;
+  }
+
   static Future<_ViewModel> future() async {
     final auth = DI.get<Authenticator>();
     final tokenSpecProvider = DI.get<TokenSpecProvider>();
@@ -134,13 +129,5 @@ class _ViewModel {
     final token = await auth.token(tokenSpec.id);
     final userInfo = await auth.userInfo();
     return _ViewModel(token, userInfo);
-  }
-
-  bool get hasPicture {
-    return userInfo.picture != null;
-  }
-
-  String get authorizationHeader {
-    return '${token.tokenType} ${token.accessToken}';
   }
 }

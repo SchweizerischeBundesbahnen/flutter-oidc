@@ -1,8 +1,7 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:sbb_design_system_mobile/sbb_design_system_mobile.dart';
+import 'package:sbb_oidc_example/auth/token_spec.dart';
 import 'package:sbb_oidc_example/auth/token_spec_provider.dart';
 import 'package:sbb_oidc_example/di.dart';
 import 'package:sbb_oidc_example/pages/home/end_session_button.dart';
@@ -28,18 +27,21 @@ class _State extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
-      body: _body(),
+      body: SafeArea(
+        child: _body(),
+      ),
     );
   }
 
   SBBHeader _appBar() {
-    return const SBBHeader(
-      title: 'Home',
+    return const SBBHeaderSmall(
+      titleText: 'Home',
     );
   }
 
   Widget _body() {
     return Column(
+      spacing: 16,
       children: [
         _userInfo(),
         _selector(),
@@ -60,13 +62,11 @@ class _State extends State<HomePage> {
       return const SizedBox.shrink();
     }
     return Container(
-      padding: const EdgeInsetsDirectional.fromSTEB(8, 16, 8, 0),
-      child: SBBSegmentedButton.text(
-        values: tokenSpecs.all.map((e) => e.displayName).toList(),
-        selectedStateIndex: index,
-        selectedIndexChanged: (i) => setState(() {
-          index = i;
-        }),
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+      child: SBBSegmentedButton<int>(
+        segments: tokenSpecs.all.toButtonSegments(),
+        selected: index,
+        onSelectionChanged: (value) => setState(() => index = value),
       ),
     );
   }
@@ -80,19 +80,26 @@ class _State extends State<HomePage> {
   }
 
   Widget _footer() {
-    var padding = const EdgeInsetsDirectional.fromSTEB(8, 16, 8, 16);
-    if (!kIsWeb && Platform.isIOS) {
-      padding = const EdgeInsetsDirectional.fromSTEB(8, 16, 8, 32);
-    }
     return Container(
-      padding: padding,
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: const Column(
+        spacing: 8,
         children: [
           EndSessionButton(),
-          SizedBox(height: 8),
           LogoutButton(),
         ],
       ),
     );
+  }
+}
+
+extension _TokenSpecListX on List<TokenSpec> {
+  List<SBBButtonSegment<int>> toButtonSegments() {
+    return mapIndexed((index, spec) {
+      return SBBButtonSegment(
+        value: index,
+        labelText: spec.displayName,
+      );
+    }).toList();
   }
 }

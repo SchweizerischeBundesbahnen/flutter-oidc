@@ -1,7 +1,10 @@
 <manifest 
     xmlns:android="http://schemas.android.com/apk/res/android" 
     xmlns:tools="http://schemas.android.com/tools"
-    package="ch.sbb.mf.esta_mobile_flutter_oidc_example">
+    package="ch.sbb.appbakery.oidc.example">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <queries>
 
@@ -50,25 +53,20 @@
         </activity>
 
         <activity
-            android:name="net.openid.appauth.RedirectUriReceiverActivity"
-            android:theme="@style/Theme.AppCompat.Translucent.NoTitleBar"
-            android:exported="true"
-            tools:node="replace">
+            android:name="com.microsoft.identity.client.BrowserTabActivity"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data 
-                    android:scheme="sbboidcexampleappint"
-                    android:host="appbakery.sbb.ch"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data 
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
                     android:scheme="esqappdevauth"
-                    android:host="oauth"/>
+                    android:host="oauth"
+                    android:path="/callback" />
+                <data
+                    android:scheme="sbboidcexampleappint"
+                    android:host="appbakery.sbb.ch"
+                    android:path="/redirect/" />
             </intent-filter>
         </activity>
 
