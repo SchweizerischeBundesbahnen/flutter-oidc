@@ -302,7 +302,7 @@ final tokenForApi2 = await client.getToken(
 <a name="multi-factor-authentication"></a>
 #### Multi-Factor authentication
 
-Some APIs require multi-factor authentication (MFA), while others do not. In the example above, the Microsoft Graph API does not require MFA, but API 1 and API 2 do. Therefore, `getToken()` will throw a [MultiFactorAuthenticationException][14]. In this case, you must call `login()` a second time and use the scopes of an API that requires MFA.
+Some APIs require multi-factor authentication (MFA), while others do not. In the example above, the Microsoft Graph API does not require MFA, but API 1 and API 2 do. Therefore, `getToken()` will throw a `MultiFactorAuthenticationException`. In this case, you must call `login()` a second time and use the scopes of an API that requires MFA.
 
 ```dart
 final tokenForApi1 = await client.login(
@@ -319,7 +319,7 @@ This opens a pop-up where the user can enter the second factor.
 <a name="example"></a>
 ## Example
 
-See [example app][15].
+See [example app][14].
 
 
 [1]: https://azure-ad.api.sbb.ch/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
@@ -335,5 +335,4 @@ See [example app][15].
 [11]: lib/src/sbb_tenant.dart
 [12]: https://developer.apple.com/documentation/security/sharing-access-to-keychain-items-among-a-collection-of-apps?language=objc
 [13]: lib/src/oidc_token.dart
-[14]: lib/src/exceptions/multi_factor_authentication_exception.dart
-[15]: example
+[14]: example
