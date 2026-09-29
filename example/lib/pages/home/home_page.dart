@@ -34,13 +34,14 @@ class _State extends State<HomePage> {
   }
 
   SBBHeader _appBar() {
-    return const SBBHeader(
+    return const SBBHeaderSmall(
       titleText: 'Home',
     );
   }
 
   Widget _body() {
     return Column(
+      spacing: 16,
       children: [
         _userInfo(),
         _selector(),
@@ -61,7 +62,7 @@ class _State extends State<HomePage> {
       return const SizedBox.shrink();
     }
     return Container(
-      padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: SBBSegmentedButton<int>(
         segments: tokenSpecs.all.toButtonSegments(),
         selected: index,
@@ -80,7 +81,7 @@ class _State extends State<HomePage> {
 
   Widget _footer() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: const Column(
         spacing: 8,
         children: [

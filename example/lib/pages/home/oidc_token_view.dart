@@ -118,7 +118,7 @@ class _State extends State<OidcTokenView> {
     return ListView(
       children: [
         SBBContentBox(
-          margin: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+          margin: const EdgeInsets.fromLTRB(8, 0, 8, 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: SBBDivider.divideItems(
@@ -142,7 +142,7 @@ class _State extends State<OidcTokenView> {
           ),
         ),
         Container(
-          margin: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 16),
+          margin: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
           alignment: AlignmentDirectional.centerEnd,
           child: SBBTertiaryButtonSmall(
             labelText: 'Copy to clipboard',

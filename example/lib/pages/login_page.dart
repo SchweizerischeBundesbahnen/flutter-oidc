@@ -82,7 +82,7 @@ class _State extends State<LoginPage> {
 
   Widget _loginButton(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: SBBPrimaryButton(
         labelText: 'Login',
         onPressed: _onLoginPressed,

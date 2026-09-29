@@ -16,24 +16,26 @@ class EndSessionConfirmationSheet {
 class const _Body({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      child: Column(
-        spacing: 8,
-        children: [
-          const Text(
-            'Confirm that you want to end the session. You will need to '
-            're-enter your login credentials if you want to use the app again '
-            'at a later time.',
-          ),
-          SBBPrimaryButton(
-            labelText: 'OK',
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: 8,
+      children: [
+        Text(
+          'Confirm that you want to end the session.',
+          style: Theme.of(context).sbbTextTheme.mediumBold,
+        ),
+        const Text(
+          'You will need to re-enter your login credentials if you want to '
+          'use the app again at a later time.',
+        ),
+        Spacer(),
+        SBBPrimaryButton(
+          labelText: 'Confirm',
+          onPressed: () {
+            Navigator.of(context).pop(true);
+          },
+        ),
+      ],
     );
   }
 }

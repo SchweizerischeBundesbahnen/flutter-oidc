@@ -26,7 +26,7 @@ class JsonWebTokenPage extends StatelessWidget {
   }
 
   SBBHeader _appBar() {
-    return SBBHeader(titleText: title);
+    return SBBHeaderSmall(titleText: title);
   }
 
   Widget _body(BuildContext context) {
