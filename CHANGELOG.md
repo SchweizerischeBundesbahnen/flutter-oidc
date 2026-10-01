@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [5.0.1]
+
+- Add consumer ProGuard rules
+- Remove logging config from Android MSAL config file
+
 ## [5.0.0]
 
 - Replaced AppAuth with native MSAL libraries for Android and iOS.
