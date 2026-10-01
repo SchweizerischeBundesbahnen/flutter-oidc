@@ -43,9 +43,6 @@ data class MsalConfig(
                     put("default", true)
                 })
             })
-            put("logcat_enabled", true)
-            put("log_level", "VERBOSE")
-            put("pii_enabled", true)
         }.toString()
     }
 }
